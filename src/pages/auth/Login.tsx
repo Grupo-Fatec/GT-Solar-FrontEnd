@@ -28,6 +28,7 @@ const Login: React.FC = () => {
       <Card className="shadow-2xl w-[500px] h-[500px] flex flex-col items-center justify-center mx-auto mt-20 p-3">
         <h1 className="text-3xl font-bold mb-4">Login</h1>
         <form onSubmit={handleLogin} className="w-full h-fit">
+          
           <Label className="text-xl font-light">Email</Label>
           <Input className="w-full mb-6" />
 

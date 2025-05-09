@@ -7,9 +7,8 @@ import { ClientForm } from "../components/ClientForm";
 import { DeleteConfirmationDialog } from "../components/DeleteConfirmationDialog";
 
 const Clientes = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [showForm, setShowForm] = useState<boolean>(false);
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showForm, setShowForm] = useState(false);
   const [clientToEdit, setClientToEdit] = useState<any | null>(null); // Cliente a ser editado
   const [clients, setClients] = useState([
     {
@@ -76,7 +75,7 @@ const Clientes = () => {
   };
 
   return (
-    <div className="flex flex-col bg-gray-50">
+    <div className="flex flex-col h-screen bg-gray-50">
       <div className="flex-1 p-8">
         <div className="max-w-7xl mx-auto">
           {!showForm ? (

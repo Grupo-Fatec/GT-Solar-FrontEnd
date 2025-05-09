@@ -63,7 +63,7 @@ export function ClientForm({ clientData, onSubmit }: ClientFormProps) {
   };
 
   return (
-    <Card className="w-full max-w-3xl">
+    <Card className="w-full bg-white shadow-md rounded-lg p-6">
       <CardHeader>
         <CardTitle>
           {clientData ? "Editar Cliente" : "Cadastro de Cliente"}
@@ -163,38 +163,6 @@ export function ClientForm({ clientData, onSubmit }: ClientFormProps) {
                 value={formData.zip}
                 onChange={(e) => handleChange("zip", e.target.value)}
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="propertyType">Tipo de Imóvel</Label>
-              <Select
-                onValueChange={(value) => handleChange("propertyType", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="residential">Residencial</SelectItem>
-                  <SelectItem value="commercial">Comercial</SelectItem>
-                  <SelectItem value="industrial">Industrial</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="roofType">Tipo de Telhado</Label>
-              <Select
-                onValueChange={(value) => handleChange("roofType", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o tipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ceramic">Cerâmica</SelectItem>
-                  <SelectItem value="concrete">Concreto</SelectItem>
-                  <SelectItem value="metal">Metálico</SelectItem>
-                  <SelectItem value="fiber">Fibrocimento</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
 
             <div className="space-y-2 md:col-span-2">

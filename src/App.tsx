@@ -8,7 +8,6 @@ import NotFound from "./pages/NotFound";
 import { routes } from "./routes/Router";
 
 const queryClient = new QueryClient();
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>

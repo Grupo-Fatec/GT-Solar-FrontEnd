@@ -39,6 +39,11 @@ export const routes: RouterRaw[] = [
         path: "clientes",
         component: () => import("@/pages/Clientes"),
       },
+      {
+        title: "projetos",
+        path: "projects",
+        component: () => import("@/pages/Projects")
+      }
     ],
   },
 ];
