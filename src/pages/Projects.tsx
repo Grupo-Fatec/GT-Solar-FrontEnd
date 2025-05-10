@@ -85,7 +85,7 @@ const Projects: React.FC = () => {
                 <SearchBar
                   value={searchQuery}
                   onChange={setSearchQuery}
-                  placeholder="Pesquisar por cliente"
+                  placeholder="Pesquisar nome do projeto"
                 />
               </div>
               <div className="bg-white rounded-lg shadow">

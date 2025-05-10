@@ -1,16 +1,19 @@
 export interface IClient {
+  id: string;
   name: string;
   document: string;
   email: string;
   phone: string;
-  address: string;
-  number: string;
+  street: string;
+  houseNumber: string;
   complement: string;
-  neighborhood: string;
+  neighbor: string;
   city: string;
-  state: string;
-  zip: string;
-  propertyType: string;
+  uf: string;
+  cep: string;
   roofType: string;
-  notes: string;
+  property: string;
+  observations: string;
+  created_at: string;
+  updated_at: string;
 }

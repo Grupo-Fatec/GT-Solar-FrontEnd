@@ -6,15 +6,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("test@example.com");
+  const [password, setPassword] = useState("password");
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     // Simple mock login logic
     if (email === "test@example.com" && password === "password") {
-      navigate("/dashboard"); // Redirect to dashboard or any protected route
+      navigate("/pages"); // Redirect to dashboard or any protected route
     } else {
       alert("Invalid credentials");
     }
@@ -28,12 +28,19 @@ const Login: React.FC = () => {
       <Card className="shadow-2xl w-[500px] h-[500px] flex flex-col items-center justify-center mx-auto mt-20 p-3">
         <h1 className="text-3xl font-bold mb-4">Login</h1>
         <form onSubmit={handleLogin} className="w-full h-fit">
-          
           <Label className="text-xl font-light">Email</Label>
-          <Input className="w-full mb-6" />
+          <Input
+            className="w-full mb-6"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
           <Label className="text-xl font-light">Senha</Label>
-          <Input className="w-full mb-6" />
+          <Input
+            className="w-full mb-6"
+            value={password}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
           <div className="flex justify-center items-center mt-4 w-full p-4">
             <Button className="bg-[#2B5337] w-[200px] p-3">Entrar</Button>

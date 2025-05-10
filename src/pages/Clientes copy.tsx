@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import ClientTable from "../components/ClientTable";
-import { ClientForm } from "../components/ClientForm";
+import ClientTable from "../components/client/ClientTable";
+import { ClientForm } from "../components/client/ClientForm";
 import { DeleteConfirmationDialog } from "../components/DeleteConfirmationDialog";
 
 const Clientes = () => {
