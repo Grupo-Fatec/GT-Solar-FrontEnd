@@ -24,6 +24,11 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				'gtsolar-green': '#1A7340',
+   				'gtsolar-green-light': '#2ECC71',
+    			'gtsolar-green-hover': '#27AE60',
+    			'gtsolar-green-dark': '#14532D',
+    			'gtsolar-text': '#1F2937',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'

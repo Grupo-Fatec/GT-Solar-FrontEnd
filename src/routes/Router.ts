@@ -22,6 +22,7 @@ export const routes: RouterRaw[] = [
         path: "",
         component: () => import("@/pages/auth/Login"),
       },
+      
     ],
   },
   {
@@ -43,7 +44,12 @@ export const routes: RouterRaw[] = [
         title: "projetos",
         path: "projects",
         component: () => import("@/pages/Projects")
-      }
+      },
+      {
+      title: "sair",
+      path: "logout",
+      component: () => import("@/pages/Logout"),
+    }
     ],
   },
 ];

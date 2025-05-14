@@ -23,10 +23,13 @@ const Sidebar = () => {
               </li>
             ))}
           </ul>
-            <button className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#4F8A6E] transition-colors text-white w-full mb-20">
+            <Link
+              to="/pages/logout"
+              className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#4F8A6E] transition-colors text-white w-full mb-20"
+            >
               <LogOut size={20} />
               <span>Sair</span>
-            </button>
+            </Link>
          </nav>
       </aside>
       <section className="w-full">
