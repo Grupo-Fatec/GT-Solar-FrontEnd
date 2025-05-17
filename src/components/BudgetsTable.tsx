@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import StatusBadgeOrc from "../components/StatusBadgeOrc";
 
 import { Budget } from "../types/Budget"; // Alterado de Project para Budget
-import { Edit, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
 interface BudgetsTableProps {
   budgets: Budget[]; // Alterado de projects para budgets
@@ -94,13 +94,13 @@ const BudgetsTable: React.FC<BudgetsTableProps> = ({
                <div className="flex justify-end gap-2">
                   <button
                     onClick={() => onEdit(budget.id)}
-                    className="p-1 text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-blue-500"
                   >
-                    <Edit size={18} />
+                    <Pencil size={18} />
                   </button>
                   <button
                     onClick={() => onDelete(budget.id)}
-                    className="p-1 text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-red-500"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -114,7 +114,7 @@ const BudgetsTable: React.FC<BudgetsTableProps> = ({
 
       <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200">
         <p className="text-sm text-gray-700">
-          Exibindo <span className="font-medium">{budgets.length}</span>{" "} 
+          Exibindo <span className="font-medium">{budgets.length}</span> de {" "} 
           <span className="font-medium">{budgets.length}</span> resultados
         </p>
         <div>

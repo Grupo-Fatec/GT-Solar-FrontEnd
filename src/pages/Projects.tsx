@@ -5,15 +5,17 @@ import ProjectsTable from '@/components/ProjectsTable';
 import { Button } from '@/components/ui/button';
 import DeleteModal from '@/components/DeleteModal';
 import SearchBar from '@/components/SearchBar';
+import Toast from '@/components/Toast';
+
 
 const projectsData: Project[] = [
   { id: 1, cliente: 'Carla Pereira da Silva', dataInicio: '11/03/2025', valor: 8000, status: 'Execução' },
-  { id: 2, cliente: 'Carla Pereira da Silva', dataInicio: '11/03/2025', valor: 8000, status: 'Finalização' },
-  { id: 3, cliente: 'Carla Pereira da Silva', dataInicio: '11/03/2025', valor: 8000, status: 'Planejamento' },
-  { id: 4, cliente: 'Carla Pereira da Silva', dataInicio: '11/03/2025', valor: 8000, status: 'Execução' },
-  { id: 5, cliente: 'Carla Pereira da Silva', dataInicio: '11/03/2025', valor: 8000, status: 'Finalização' },
-  { id: 6, cliente: 'Carla Pereira da Silva', dataInicio: '11/03/2025', valor: 8000, status: 'Planejamento' },
-  { id: 7, cliente: 'Carla Pereira da Silva', dataInicio: '11/03/2025', valor: 8000, status: 'Execução' },
+  { id: 2, cliente: 'Augusto Souza ', dataInicio: '27/02/2018', valor: 8000, status: 'Finalização' },
+  { id: 3, cliente: 'Lais Cardoso ', dataInicio: '30/01/2022', valor: 8000, status: 'Planejamento' },
+  { id: 4, cliente: 'Humberto Gonçalves', dataInicio: '09/11/2025', valor: 8000, status: 'Execução' },
+  { id: 5, cliente: 'Luana Carvalho', dataInicio: '12/05/2023', valor: 8000, status: 'Finalização' },
+  { id: 6, cliente: 'Bruno Ribeiro Silva', dataInicio: '15/12/20254', valor: 8000, status: 'Planejamento' },
+  
 ];
 
 const Projects: React.FC = () => {
@@ -23,6 +25,10 @@ const Projects: React.FC = () => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isProjectModalOpen, setProjectModalOpen] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<"success" | "error" | "info">("success");
+  const [showToast, setShowToast] = useState(false);
+
 
   useEffect(() => {
     if (searchQuery) {
@@ -58,21 +64,28 @@ const Projects: React.FC = () => {
       setProjects(projects.filter((project) => project.id !== selectedProjectId));
       setSelectedProjectId(null);
       setDeleteModalOpen(false);
+      triggerToast('Projeto projeto com sucesso!', 'success');
     }
   };
 
   const handleSaveProject = (project: Project) => {
     if (projectToEdit) {
       setProjects(projects.map(p => p.id === project.id ? project : p));
+      triggerToast('Projeto editado com sucesso!', 'success');
     } else {
       setProjects([...projects, project]);
+      triggerToast('Projeto cadastrado com sucesso!', 'success');
     }
     setProjectModalOpen(false);
     setProjectToEdit(null);
   };
 
   const selectedProject = projects.find(p => p.id === selectedProjectId);
-
+  const triggerToast = (message: string, type: "success" | "error" | "info" = "success") => {
+    setToastMessage(message);
+    setToastType(type);
+    setShowToast(true);
+  };
   return (
     <div className="flex h-screen">
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -85,7 +98,7 @@ const Projects: React.FC = () => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder="Pesquisar nome do projeto"
+                placeholder="Pesquisar nome do cliente"
               />
             </div>
             <div className="bg-white rounded-lg shadow">
@@ -123,6 +136,13 @@ const Projects: React.FC = () => {
         onSave={handleSaveProject}
         projectToEdit={projectToEdit}
       />
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </div>
   );
 };

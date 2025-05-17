@@ -184,7 +184,7 @@ const Clientes = () => {
                 <SearchBar
                   value={searchQuery}
                   onChange={setSearchQuery}
-                  placeholder="Pesquisar nome do cliente cliente"
+                  placeholder="Pesquisar nome do cliente "
                 />
               </div>
               <div className="bg-white rounded-lg shadow">

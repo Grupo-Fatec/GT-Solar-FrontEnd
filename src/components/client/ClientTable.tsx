@@ -71,13 +71,13 @@ const ClientTable = ({ clients, onEdit, onDelete }: ClientTableProps) => {
               <td className="px-6 py-3 whitespace-nowrap text-right text-sm font-medium flex justify-end space-x-2">
                 <button
                   onClick={() => onEdit(client.id)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-blue-500"
                 >
                   <Pencil size={18} />
                 </button>
                 <button
                   onClick={() => onDelete(client.id)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-red-500"
                 >
                   <Trash2 size={18} />
                 </button>

@@ -127,7 +127,7 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
         <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
           <div>
             <p className="text-sm text-gray-700">
-              Exibindo <span className="font-medium">7</span> de{" "}
+              Exibindo <span className="font-medium">7</span> de {" "}
               <span className="font-medium">7</span> resultados
             </p>
           </div>
