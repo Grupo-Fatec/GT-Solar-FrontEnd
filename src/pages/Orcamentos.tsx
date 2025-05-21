@@ -5,7 +5,6 @@ import BudgetTable from '@/components/BudgetsTable';
 import { Button } from '@/components/ui/button';
 import DeleteModal from '@/components/DeleteModal';
 import SearchBar from '@/components/SearchBar';
-import SolarQuoteModal from '@/components/SolarQuoteModal';
 import Toast from '@/components/Toast';
 
 const budgetsData: Budget[] = [
@@ -23,7 +22,7 @@ const Budgets: React.FC = () => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isBudgetModalOpen, setBudgetModalOpen] = useState(false);
   const [budgetToEdit, setBudgetToEdit] = useState<Budget | null>(null);
-   const [isSolarQuoteModalOpen, setSolarQuoteModalOpen] = useState(false); // Estado para o novo modal
+
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<"success" | "error" | "info">("success");
   const [showToast, setShowToast] = useState(false);
@@ -78,9 +77,7 @@ const Budgets: React.FC = () => {
     setBudgetModalOpen(false);
     setBudgetToEdit(null);
   };
-  const handleOpenSolarQuoteModal = () => { // Handler para abrir o novo modal
-    setSolarQuoteModalOpen(true);
-  };
+  
   const triggerToast = (message: string, type: "success" | "error" | "info" = "success") => {
     setToastMessage(message);
     setToastType(type);
@@ -109,12 +106,7 @@ const Budgets: React.FC = () => {
               />
             </div>
              <div className="mt-8 flex justify-between">
-            <Button
-              className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white sm:w-auto"
-              onClick={handleOpenSolarQuoteModal}
-            >
-              Gerar Orçamento Solar
-            </Button>
+            
             <Button
               className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white"
               onClick={handleAddBudgetClick}
@@ -141,10 +133,7 @@ const Budgets: React.FC = () => {
         onSave={handleSaveBudget}
         budgetToEdit={budgetToEdit}
       />
-      <SolarQuoteModal
-        isOpen={isSolarQuoteModalOpen}
-        onClose={() => setSolarQuoteModalOpen(false)}
-      />
+      
       {showToast && (
       <Toast
         message={toastMessage}
