@@ -20,20 +20,21 @@ const DeleteModal = ({
       <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
         <h2 className="text-xl font-semibold mb-4">{title}</h2>
         <p className="mb-6">{description}</p>
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-between w-full">
           <button
-            onClick={onClose}
-            className="px-4 py-2 rounded border text-gray-600 hover:bg-gray-100"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={onConfirm}
-            className="px-6 py-2 rounded bg-red-700 text-white hover:bg-red-800"
-          >
-            Excluir
-          </button>
-        </div>
+          onClick={onClose}
+          className="px-4 py-2 rounded border text-gray-600 hover:bg-gray-100"
+        >
+          Cancelar
+        </button>
+        <button
+          onClick={onConfirm}
+          className="px-6 py-2 rounded bg-red-700 text-white hover:bg-red-800"
+        >
+          Excluir
+        </button>
+      </div>
+
       </div>
     </div>
   );

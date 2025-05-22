@@ -24,9 +24,7 @@ const LogoutPage: React.FC = () => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg text-center transform translate-x-10">
         <div className="mb-6">
-          <div className="h-16 w-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <LogOut className="h-8 w-8 text-red-500" />
-          </div>
+          
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Confirmar Saída</h1>
           <p className="text-gray-600">
             Tem certeza que deseja sair do sistema GT Solar?

@@ -105,7 +105,7 @@ const Budgets: React.FC = () => {
                 onDelete={handleDeleteClick}
               />
             </div>
-             <div className="mt-8 flex justify-between">
+             <div className="mt-8 flex justify-end">
             
             <Button
               className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white"
