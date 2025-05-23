@@ -6,7 +6,7 @@ import { Eye, EyeOff } from 'lucide-react';
 
 const RecuperarSenha = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false); // Usando o mesmo estado para as duas senhas
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -24,23 +24,18 @@ const RecuperarSenha = () => {
     setSuccessMessage('Senha redefinida com sucesso!');
     setTimeout(() => {
       setSuccessMessage('');
-      navigate('/login'); // Redireciona para o login após 2 segundos
+      navigate('/login');
     }, 2000);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gtsolar-green-dark px-4">
       <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8">
-        {successMessage && (
-          <div className="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded text-sm">
-            {successMessage}
-          </div>
-        )}
         <h1 className="text-3xl font-bold text-center text-gtsolar-green mb-2">GT Solar</h1>
         <h2 className="text-gtsolar-text font-medium text-xl">Recuperar senha</h2>
         <p className="text-gray-500 text-lg mb-4">Informe seu e-mail e defina uma nova senha</p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 relative">
           <div>
             <label htmlFor="email" className="text-lg font-semibold text-gray-700">E-mail</label>
             <Input
@@ -52,42 +47,55 @@ const RecuperarSenha = () => {
               className="border-gray-300 focus:border-gtsolar-green focus:ring-gtsolar-green"
             />
           </div>
-          <div>
+
+          <div className="relative">
             <label htmlFor="newPassword" className="text-lg font-semibold text-gray-700">Nova senha</label>
-            <div className="relative">
-              <Input
-                id="newPassword"
-                type={showPassword ? "text" : "password"}
-                placeholder="Nova senha"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-                className="border-gray-300 focus:border-gtsolar-green focus:ring-gtsolar-green"
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="confirmPassword" className="text-lg font-semibold text-gray-700">Repita a nova senha</label>
-            <div className="relative">
-              <Input
-                id="confirmPassword"
-                type={showPassword ? "text" : "password"}
-                placeholder="Repita a nova senha"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="border-gray-300 focus:border-gtsolar-green focus:ring-gtsolar-green"
-              />
-            </div>
+            <Input
+              id="newPassword"
+              type={showPassword ? "text" : "password"}
+              placeholder="Nova senha"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              className="border-gray-300 focus:border-gtsolar-green focus:ring-gtsolar-green pr-10"
+              autoComplete="new-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-9 text-gray-500"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)} // Alterna o estado de visibilidade
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-          >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
+          <div className="relative">
+            <label htmlFor="confirmPassword" className="text-lg font-semibold text-gray-700">Repita a nova senha</label>
+            <Input
+              id="confirmPassword"
+              type={showPassword ? "text" : "password"}
+              placeholder="Repita a nova senha"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="border-gray-300 focus:border-gtsolar-green focus:ring-gtsolar-green pr-10"
+              autoComplete="new-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-9 text-gray-500"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+
+            {/* Aqui a mensagem de sucesso abaixo do campo */}
+            {successMessage && (
+              <p className="mt-2 text-green-600 text-sm font-medium">
+                {successMessage}
+              </p>
+            )}
+          </div>
 
           <div className="space-y-2 pt-2">
             <Button
@@ -100,7 +108,7 @@ const RecuperarSenha = () => {
               type="button"
               variant="outline"
               className="w-full text-base"
-              onClick={() => navigate('/')}  // Botão de voltar para o login
+              onClick={() => navigate('/login')}
             >
               Voltar
             </Button>
@@ -112,3 +120,4 @@ const RecuperarSenha = () => {
 };
 
 export default RecuperarSenha;
+

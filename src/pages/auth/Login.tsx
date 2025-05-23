@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import Cadastro from './Cadastro';
 import RecuperarSenha from './RecuperarSenha';
 
@@ -9,7 +10,8 @@ const Login = () => {
   const [isRecovering, setIsRecovering] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // Controlando a visibilidade com um único estado
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate(); // Controlando a visibilidade com um único estado
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,13 +72,15 @@ const Login = () => {
               </div>
 
               <div className="flex justify-end mt-2">
-                <button
-                  onClick={() => setIsRecovering(true)}
-                  className="text-gtsolar-green hover:underline text-base"
+                <Button
+                  variant="link"
+                  className="text-green-600 hover:text-green-800"  
+                  onClick={() => navigate('/recuperar-senha')}
                 >
-                  Esqueci a senha
-                </button>
+                  Esqueceu sua senha?
+                </Button>
               </div>
+
 
               <button
                 type="submit"
@@ -86,14 +90,15 @@ const Login = () => {
               </button>
             </form>
 
-            <div className="mt-4 text-center text-base">
+            <div className="mt-6 text-center text-base text-gray-600 ">
               <span>Não tem conta? </span>
-              <button
-                onClick={() => setIsRegistering(true)}
-                className="text-gtsolar-green hover:underline text-base"
+              <Button
+                variant="link"
+                className="text-green-600 hover:text-green-800"
+                onClick={() => navigate('/Cadastro')}
               >
                 Cadastre-se
-              </button>
+              </Button>
             </div>
           </div>
         </div>

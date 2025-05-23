@@ -13,12 +13,14 @@ const Cadastro = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const validateName = (value: string) => /^[A-Za-zÀ-ÿ\s]*$/.test(value);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
 
     // Verificar se as senhas coincidem
     if (password !== confirmPassword) {
@@ -34,7 +36,12 @@ const Cadastro = () => {
 
     // Caso tudo esteja correto
     console.log('Conta criada com:', { name, email, password });
-    setTimeout(() => navigate('/'), 2000);
+
+    setSuccessMessage('Conta criada com sucesso!');
+    setTimeout(() => {
+      setSuccessMessage('');
+      navigate('/login'); // Redireciona para o login após 2 segundos
+    }, 2000);
   };
 
   return (
@@ -113,6 +120,7 @@ const Cadastro = () => {
           </div>
 
           {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+          {successMessage && <p className="text-green-600 text-sm font-medium">{successMessage}</p>}
 
           <div className="space-y-2 pt-2">
             <Button
@@ -125,7 +133,7 @@ const Cadastro = () => {
               type="button"
               variant="outline"
               className="w-full text-base"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/login')}
             >
               Voltar
             </Button>
@@ -135,8 +143,8 @@ const Cadastro = () => {
         <p className="mt-6 text-center text-base text-gray-600">
           Já possui uma conta?{' '}
           <a
-            href="/"
-            className="text-gtsolar-green text-base hover:underline font-medium"
+            href="/login"
+            className="text-green-600 hover:text-green-800"
           >
             Entrar
           </a>

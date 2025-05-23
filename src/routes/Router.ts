@@ -19,10 +19,20 @@ export const routes: RouterRaw[] = [
     children: [
       {
         title: "login",
-        path: "",
+        path: "login",
         component: () => import("@/pages/auth/Login"),
       },
-      
+      {
+      title: "recuperar senha",
+      path: "recuperar-senha",
+      component: () => import("@/pages/auth/RecuperarSenha"),
+    },
+      {
+      title: "criar conta",
+      path: "Cadastro",      // essa será a URL /criar-conta
+      component: () => import("@/pages/auth/Cadastro"),
+    },
+            
     ],
   },
   {
