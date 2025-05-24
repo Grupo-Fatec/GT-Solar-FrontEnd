@@ -100,13 +100,13 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
               <td className="px-6 py-3 whitespace-nowrap text-right text-sm font-medium flex justify-end space-x-2">
                 <button
                   onClick={() => onEdit(project.id)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-blue-500"  // Muda para azul ao passar o mouse
                 >
                   <Pencil size={18} />
                 </button>
                 <button
                   onClick={() => onDelete(project.id)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-red-500"  // Muda para vermelho ao passar o mouse
                 >
                   <Trash2 size={18} />
                 </button>
@@ -127,7 +127,7 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
         <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
           <div>
             <p className="text-sm text-gray-700">
-              Exibindo <span className="font-medium">7</span> de{" "}
+              Exibindo <span className="font-medium">7</span> de {" "}
               <span className="font-medium">7</span> resultados
             </p>
           </div>
@@ -178,3 +178,4 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
 };
 
 export default ProjectsTable;
+

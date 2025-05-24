@@ -1,53 +1,109 @@
+import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cadastro from './Cadastro';
+import RecuperarSenha from './RecuperarSenha';
 
-const Login: React.FC = () => {
-  const [email, setEmail] = useState("test@example.com");
-  const [password, setPassword] = useState("password");
-  const navigate = useNavigate();
+const Login = () => {
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [isRecovering, setIsRecovering] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate(); // Controlando a visibilidade com um único estado
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple mock login logic
-    if (email === "test@example.com" && password === "password") {
-      navigate("/pages"); // Redirect to dashboard or any protected route
-    } else {
-      alert("Invalid credentials");
-    }
+    console.log('Login attempt with:', { email, password });
   };
 
   return (
-    <body>
-      <header className="flex bg-[#2B5337] w-full h-[60px] text-center items-center justify-center">
-        <h1 className="text-white text-2xl font-bold">GT Solar</h1>
-      </header>
-      <Card className="shadow-2xl w-[500px] h-[500px] flex flex-col items-center justify-center mx-auto mt-20 p-3">
-        <h1 className="text-3xl font-bold mb-4">Login</h1>
-        <form onSubmit={handleLogin} className="w-full h-fit">
-          <Label className="text-xl font-light">Email</Label>
-          <Input
-            className="w-full mb-6"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+    <div>
+      {isRegistering ? (
+        <Cadastro />
+      ) : isRecovering ? (
+        <RecuperarSenha />
+      ) : (
+        <div className="min-h-screen flex items-center justify-center bg-gtsolar-green-dark px-4">
+          <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8">
+            <h1 className="text-3xl font-bold text-center text-gtsolar-green mb-2">GT Solar</h1>
 
-          <Label className="text-xl font-light">Senha</Label>
-          <Input
-            className="w-full mb-6"
-            value={password}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+            <div className="mb-6">
+              <h2 className="font-bold text-xl">Entre com suas credenciais</h2>
+            </div>
 
-          <div className="flex justify-center items-center mt-4 w-full p-4">
-            <Button className="bg-[#2B5337] w-[200px] p-3">Entrar</Button>
+            <form onSubmit={handleLoginSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-lg font-semibold text-gray-700">
+                  E-mail
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="E-mail"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+
+              <div className="relative">
+                <label htmlFor="password" className="block text-lg font-semibold text-gray-700">
+                  Senha
+                </label>
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"} // Usando o estado de visibilidade para alternar entre texto e senha
+                  placeholder="Senha"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full p-2 pr-10 border border-gray-300 rounded"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)} // Alternando a visibilidade da senha
+                  className="absolute top-10 right-3 text-gray-500"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+
+              <div className="flex justify-end mt-2">
+                <Button
+                  variant="link"
+                  className="text-green-600 hover:text-green-800"  
+                  onClick={() => navigate('/recuperar-senha')}
+                >
+                  Esqueceu sua senha?
+                </Button>
+              </div>
+
+
+              <button
+                type="submit"
+                className="w-full p-2 bg-gtsolar-green-light text-base text-white rounded mt-4"
+              >
+                Entrar
+              </button>
+            </form>
+
+            <div className="mt-6 text-center text-base text-gray-600 ">
+              <span>Não tem conta? </span>
+              <Button
+                variant="link"
+                className="text-green-600 hover:text-green-800"
+                onClick={() => navigate('/Cadastro')}
+              >
+                Cadastre-se
+              </Button>
+            </div>
           </div>
-        </form>
-      </Card>
-    </body>
+        </div>
+      )}
+    </div>
   );
 };
 

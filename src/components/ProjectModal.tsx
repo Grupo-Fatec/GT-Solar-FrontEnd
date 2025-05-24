@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { Project } from '../types/Project';
+import { NumericFormat } from 'react-number-format';
 
 interface ProjectModalProps {
   isOpen: boolean;
@@ -22,6 +23,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
   const [valor, setValor] = useState('');
   const [status, setStatus] = useState<'Execução' | 'Finalização' | 'Planejamento'>('Execução');
 
+  const [errors, setErrors] = useState({
+    nome: '',
+    dataInicio: '',
+    valor: '',
+    status: '',
+  });
+
   useEffect(() => {
     if (projectToEdit) {
       setNome(projectToEdit.cliente);
@@ -38,11 +46,59 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
       setDataInicio('');
       setValor('');
       setStatus('Execução');
+      setErrors({
+        nome: '',
+        dataInicio: '',
+        valor: '',
+        status: '',
+      });
     }
   }, [isOpen]);
 
+  const handleValorChange = (values: { value: string; floatValue?: number }) => {
+    setValor(values.value);
+
+    if (!values.value || values.floatValue === undefined) {
+      setErrors((prev) => ({
+        ...prev,
+        valor: 'Valor é obrigatório e deve conter apenas números',
+      }));
+    } else {
+      setErrors((prev) => ({ ...prev, valor: '' }));
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors = { nome: '', dataInicio: '', valor: '', status: '' };
+    let isValid = true;
+
+    if (!nome || /[^A-Za-zÀ-ÿ\s]/.test(nome)) {
+      newErrors.nome = 'Nome é obrigatório e deve conter apenas letras';
+      isValid = false;
+    }
+
+    if (!dataInicio) {
+      newErrors.dataInicio = 'Data de início é obrigatória';
+      isValid = false;
+    }
+
+    if (!valor || isNaN(Number(valor))) {
+      newErrors.valor = 'Valor é obrigatório e deve conter apenas números';
+      isValid = false;
+    }
+
+    if (!status) {
+      newErrors.status = 'Status é obrigatório';
+      isValid = false;
+    }
+
+    setErrors(newErrors); // Atualiza o estado de erros
+    return isValid;
+  };
+
   const handleSubmit = () => {
-    if (!nome || !dataInicio || !valor || !status) return;
+    // Chama a validação ao clicar em "Salvar"
+    if (!validateForm()) return;
 
     const [year, month, day] = dataInicio.split('-');
     const formattedDate = `${day}/${month}/${year}`;
@@ -51,8 +107,8 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
       id: projectToEdit ? projectToEdit.id : Math.random(),
       cliente: nome,
       dataInicio: formattedDate,
-      valor: parseFloat(valor.replace(/[^\d.-]/g, '')),
-      status
+      valor: parseFloat(valor),
+      status,
     });
 
     onClose();
@@ -70,7 +126,12 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
-            <Input placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
+            <Input 
+              placeholder="Nome" 
+              value={nome} 
+              onChange={(e) => setNome(e.target.value)} 
+            />
+            {errors.nome && <p className="text-red-500 text-sm">{errors.nome}</p>}
           </div>
 
           <div className="flex gap-4">
@@ -81,15 +142,20 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
                 value={dataInicio}
                 onChange={(e) => setDataInicio(e.target.value)}
               />
+              {errors.dataInicio && <p className="text-red-500 text-sm">{errors.dataInicio}</p>}
             </div>
             <div className="w-1/2">
               <label className="block text-sm font-medium text-gray-700 mb-1">Valor</label>
-              <Input
-                type="text"
-                placeholder="Valor"
+              <NumericFormat
                 value={valor}
-                onChange={(e) => setValor(e.target.value)}
+                thousandSeparator="."
+                decimalSeparator=","
+                prefix="R$ "
+                allowNegative={false}
+                onValueChange={handleValorChange}
+                className="w-full border border-gray-300 p-2 rounded-md"
               />
+              {errors.valor && <p className="text-red-500 text-sm">{errors.valor}</p>}
             </div>
           </div>
 
@@ -104,6 +170,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
               <option value="Finalização">Finalização</option>
               <option value="Planejamento">Planejamento</option>
             </select>
+            {errors.status && <p className="text-red-500 text-sm">{errors.status}</p>}
           </div>
 
           <div className="flex justify-end pt-4">
@@ -122,3 +189,4 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 };
 
 export default ProjectModal;
+
