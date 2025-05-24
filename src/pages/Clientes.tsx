@@ -9,6 +9,8 @@ import { ModalComponent } from "@/components/ModalComponent";
 import { emptyClient } from "@/utils/emptyObjects/Client.empty.obj";
 import { ClientService } from "@/services/ClientService";
 
+const clientService = new ClientService();
+
 const Clientes = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [clientList, setClientList] = useState<IClient[]>([]);
@@ -24,7 +26,7 @@ const Clientes = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const data = await ClientService.getAll();
+        const data = await clientService.getAll();
         setClientList(data);
       } catch (error) {
         console.error("Erro ao buscar clientes:", error);
@@ -35,7 +37,7 @@ const Clientes = () => {
 
   const fetchClients = async () => {
     try {
-      const data = await ClientService.getAll();
+      const data = await clientService.getAll();
       setClientList(data);
     } catch (error) {
       console.error("Erro ao buscar clientes:", error);
@@ -45,7 +47,7 @@ const Clientes = () => {
   // Abrir modal de edição
   const openEditClient = async (id: string) => {
     try {
-      const selectedClient = await ClientService.getById(id);
+      const selectedClient = await clientService.getById(id);
       setClient(selectedClient);
       setEditModal(true);
     } catch (error) {
@@ -56,7 +58,7 @@ const Clientes = () => {
 
   const handleUpdateClient = async (updatedClient: IClient) => {
     try {
-      await ClientService.update(updatedClient.id, updatedClient);
+      await clientService.update(updatedClient.id, updatedClient);
       setEditModal(false);
       fetchClients();
     } catch (error) {
@@ -74,7 +76,7 @@ const Clientes = () => {
 
   const handleCreateClient = async (newClient: IClient) => {
     try {
-      await ClientService.create(newClient);
+      await clientService.create(newClient);
       setShowForm(false);
       fetchClients();
     } catch (error) {
@@ -87,7 +89,7 @@ const Clientes = () => {
   const confirmDeleteClient = async () => {
     if (!clientToDeleteId) return;
     try {
-      await ClientService.delete(clientToDeleteId);
+      await clientService.delete(clientToDeleteId);
       setDeleteModal(false);
       fetchClients();
     } catch (error) {

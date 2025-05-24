@@ -24,7 +24,7 @@ export const routes: RouterRaw[] = [
       },
       {
       title: "recuperar senha",
-      path: "recuperar-senha",
+      path: "recoverypassword", // essa será a URL /recuperar-senha
       component: () => import("@/pages/auth/RecuperarSenha"),
     },
       {

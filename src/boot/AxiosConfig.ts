@@ -1,6 +1,6 @@
-import { Axios } from "axios";
+import axios from "axios";
 
-const api = new Axios({
+const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
 });
 

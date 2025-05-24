@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import React, { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import Cadastro from './Cadastro';
-import RecuperarSenha from './RecuperarSenha';
+import Cadastro from "./Cadastro";
+import RecuperarSenha from "./RecuperarSenha";
+import { AuthService } from "@/services/AuthService";
+
+const authService = new AuthService();
 
 const Login = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [isRecovering, setIsRecovering] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate(); // Controlando a visibilidade com um único estado
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempt with:', { email, password });
+    const res = await authService.login(email, password);
+    if (res.status === 200) {
+      navigate("/pages/");
+    } else {
+      alert("Erro ao fazer login");
+      console.error("Erro ao fazer login:", res);
+    }
+    console.log(res.data);
   };
 
   return (
@@ -27,7 +37,9 @@ const Login = () => {
       ) : (
         <div className="min-h-screen flex items-center justify-center bg-gtsolar-green-dark px-4">
           <div className="w-full max-w-2xl bg-white rounded-xl shadow-lg p-8">
-            <h1 className="text-3xl font-bold text-center text-gtsolar-green mb-2">GT Solar</h1>
+            <h1 className="text-3xl font-bold text-center text-gtsolar-green mb-2">
+              GT Solar
+            </h1>
 
             <div className="mb-6">
               <h2 className="font-bold text-xl">Entre com suas credenciais</h2>
@@ -35,7 +47,10 @@ const Login = () => {
 
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-lg font-semibold text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="block text-lg font-semibold text-gray-700"
+                >
                   E-mail
                 </label>
                 <input
@@ -50,7 +65,10 @@ const Login = () => {
               </div>
 
               <div className="relative">
-                <label htmlFor="password" className="block text-lg font-semibold text-gray-700">
+                <label
+                  htmlFor="password"
+                  className="block text-lg font-semibold text-gray-700"
+                >
                   Senha
                 </label>
                 <input
@@ -74,13 +92,12 @@ const Login = () => {
               <div className="flex justify-end mt-2">
                 <Button
                   variant="link"
-                  className="text-green-600 hover:text-green-800"  
-                  onClick={() => navigate('/recuperar-senha')}
+                  className="text-green-600 hover:text-green-800"
+                  onClick={() => navigate("/recuperar-senha")}
                 >
                   Esqueceu sua senha?
                 </Button>
               </div>
-
 
               <button
                 type="submit"
@@ -89,17 +106,6 @@ const Login = () => {
                 Entrar
               </button>
             </form>
-
-            <div className="mt-6 text-center text-base text-gray-600 ">
-              <span>Não tem conta? </span>
-              <Button
-                variant="link"
-                className="text-green-600 hover:text-green-800"
-                onClick={() => navigate('/Cadastro')}
-              >
-                Cadastre-se
-              </Button>
-            </div>
           </div>
         </div>
       )}
