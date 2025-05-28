@@ -12,7 +12,7 @@ const LogoutPage: React.FC = () => {
     console.log('Usuário desconectado');
     
     // Redirecionar para a página inicial após o logout
-    navigate('/');
+    navigate('/login');
   };
 
   const handleCancel = () => {
