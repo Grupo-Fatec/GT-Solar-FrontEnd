@@ -1,4 +1,4 @@
-import { StatusType } from "../types/Commission";
+import React from "react";
 
 interface StatusBadgeComProps {
   status: "Pago" | "Não pago";
@@ -6,24 +6,13 @@ interface StatusBadgeComProps {
 
 const StatusBadgeCom: React.FC<StatusBadgeComProps> = ({ status }) => {
   const getStatusStyle = () => {
-    switch (status) {
-      case "Pago":
-        return {
-          backgroundColor: "#9bd9a9", // verde suave
-          borderRadius: "10px",
-          padding: "6px 18px",
-          fontSize: "14px"
-        };
-      case "Não pago":
-        return {
-          backgroundColor: "#fca5a5", // vermelho suave
-          borderRadius: "10px",
-          padding: "6px 18px",
-          fontSize: "14px"
-        };
-      default:
-        return {};
-    }
+    return {
+      backgroundColor: status === "Pago" ? "#9bd9a9" : "#fca5a5",
+      borderRadius: "10px",
+      padding: "6px 18px",
+      fontSize: "14px",
+      whiteSpace: "nowrap", // impede quebra de linha
+    };
   };
 
   return <span style={getStatusStyle()}>{status}</span>;

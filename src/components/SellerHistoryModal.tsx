@@ -40,52 +40,66 @@ const SellerHistoryModal: React.FC<SellerHistoryModalProps> = ({ seller, commiss
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="w-[90vw] max-w-5xl max-h-[90vh] overflow-auto">
-
+      <DialogContent className="w-[95vw] max-w-5xl max-h-[90vh] overflow-auto p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Histórico do Vendedor: {seller}</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-bold text-center sm:text-left">
+            Histórico do Vendedor: {seller}
+          </DialogTitle>
         </DialogHeader>
 
-        <table className="min-w-full divide-y divide-gray-200 mt-4">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-4 py-2 text-left text-sm font-semibold ">Cliente</th>
-              <th className="px-4 py-2 text-left text-sm font-semibold ">Orçamento</th>
-              <th className="px-4 py-2 text-left text-sm font-semibold ">Valor</th>
-              <th className="px-4 py-2 text-left text-sm font-semibold ">Data</th>
-              <th className="px-4 py-2 text-left text-sm font-semibold ">Status</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {commissions.map((commission) => (
-              <tr key={commission.id} className="hover:bg-gray-50">
-                <td className="px-4 py-2 text-sm text-gray-900">{commission.cliente}</td>
-                <td className="px-4 py-2 text-sm text-gray-900">
-                  R$ {commission.orcamento.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-                </td>
-                <td className="px-4 py-2 text-sm text-gray-900">
-                  R$ {commission.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-                </td>
-                <td className="px-4 py-2 text-sm text-gray-500">{commission.dataInicio}</td>
-                <td className="px-4 py-2">
-                  <StatusBadgeCom status={commission.status} />
-                </td>
+        {/* Container para scroll horizontal em telas pequenas */}
+        <div className="mt-4 overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="px-3 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap">
+                  Cliente
+                </th>
+                <th className="px-3 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap">
+                  Orçamento
+                </th>
+                <th className="px-3 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap">
+                  Valor
+                </th>
+                <th className="px-3 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap">
+                  Data
+                </th>
+                <th className="px-3 sm:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-700 whitespace-nowrap">
+                  Status
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {commissions.map((commission) => (
+                <tr key={commission.id} className="hover:bg-gray-50">
+                  <td className="px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-900 whitespace-nowrap">{commission.cliente}</td>
+                  <td className="px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-900 whitespace-nowrap">
+                    R$ {commission.orcamento.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  </td>
+                  <td className="px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-900 whitespace-nowrap">
+                    R$ {commission.valor.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  </td>
+                  <td className="px-3 sm:px-4 py-2 text-xs sm:text-sm text-gray-500 whitespace-nowrap">{commission.dataInicio}</td>
+                  <td className="px-3 sm:px-4 py-2 whitespace-nowrap">
+                    <StatusBadgeCom status={commission.status} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-        <div className="mt-6 flex justify-between">
+        <div className="mt-6 flex flex-col sm:flex-row justify-between gap-3 sm:gap-0">
           <button
             onClick={onClose}
-            className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2 rounded shadow-sm"
+            className="w-full sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2 rounded shadow-sm transition"
           >
             Voltar
           </button>
 
           <button
             onClick={generatePDF}
-            className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white font-semibold px-4 py-2 rounded shadow"
+            className="w-full sm:w-auto bg-[#4F8A6E] hover:bg-[#2B5337] text-white font-semibold px-4 py-2 rounded shadow transition"
           >
             Gerar PDF
           </button>

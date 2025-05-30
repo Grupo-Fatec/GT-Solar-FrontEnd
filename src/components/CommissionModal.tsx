@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Commission } from "../types/Commission";
@@ -18,7 +23,6 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
   onSave,
   commissionToEdit,
 }) => {
-  
   const [vendedor, setVendedor] = useState("");
   const [cliente, setCliente] = useState("");
   const [orcamento, setOrcamento] = useState("");
@@ -27,7 +31,6 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
   const [status, setStatus] = useState<"Pago" | "Não pago">("Pago");
 
   const [errors, setErrors] = useState({
-   
     vendedor: "",
     cliente: "",
     orcamento: "",
@@ -38,7 +41,6 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
 
   useEffect(() => {
     if (commissionToEdit) {
-      
       setVendedor(commissionToEdit.vendedor);
       setCliente(commissionToEdit.cliente);
       setOrcamento(commissionToEdit.orcamento.toString());
@@ -50,7 +52,6 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
 
   useEffect(() => {
     if (!isOpen) {
-      
       setVendedor("");
       setCliente("");
       setOrcamento("");
@@ -71,7 +72,6 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
   const validateForm = () => {
     let isValid = true;
     const newErrors = {
-      
       vendedor: "",
       cliente: "",
       orcamento: "",
@@ -79,8 +79,6 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
       valor: "",
       status: "",
     };
-
-    
 
     if (!vendedor.trim()) {
       newErrors.vendedor = "Vendedor é obrigatório";
@@ -94,17 +92,14 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
       newErrors.orcamento = "Orçamento deve ser um número válido";
       isValid = false;
     }
-
     if (!dataInicio) {
       newErrors.dataInicio = "Data é obrigatória";
       isValid = false;
     }
-
     if (!valor || isNaN(Number(valor))) {
       newErrors.valor = "Valor deve ser um número válido";
       isValid = false;
     }
-
     if (!status) {
       newErrors.status = "Status é obrigatório";
       isValid = false;
@@ -134,28 +129,42 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl p-8 rounded-2xl">
+      <DialogContent className="w-full max-w-4xl p-4 sm:p-6 md:p-8 rounded-2xl">
         <DialogHeader className="flex justify-between items-center">
-          <DialogTitle>{commissionToEdit ? "Editar Comissão" : "Nova Comissão"}</DialogTitle>
+          <DialogTitle>
+            {commissionToEdit ? "Editar Comissão" : "Nova Comissão"}
+          </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
           {/* Vendedor */}
           <div>
             <Label>Vendedor</Label>
-            <Input value={vendedor} onChange={(e) => setVendedor(e.target.value)} placeholder="Nome do vendedor" />
-            {errors.vendedor && <p className="text-red-500 text-sm">{errors.vendedor}</p>}
+            <Input
+              value={vendedor}
+              onChange={(e) => setVendedor(e.target.value)}
+              placeholder="Nome do vendedor"
+            />
+            {errors.vendedor && (
+              <p className="text-red-500 text-sm">{errors.vendedor}</p>
+            )}
           </div>
 
           {/* Cliente */}
           <div>
             <Label>Cliente</Label>
-            <Input value={cliente} onChange={(e) => setCliente(e.target.value)} placeholder="Nome do cliente" />
-            {errors.cliente && <p className="text-red-500 text-sm">{errors.cliente}</p>}
+            <Input
+              value={cliente}
+              onChange={(e) => setCliente(e.target.value)}
+              placeholder="Nome do cliente"
+            />
+            {errors.cliente && (
+              <p className="text-red-500 text-sm">{errors.cliente}</p>
+            )}
           </div>
 
-          {/* Orçamento e Data lado a lado */}
-          <div className="flex gap-4">
+          {/* Orçamento e Data */}
+          <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <Label>Orçamento</Label>
               <Input
@@ -164,18 +173,26 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
                 onChange={(e) => setOrcamento(e.target.value)}
                 placeholder="Número do orçamento"
               />
-              {errors.orcamento && <p className="text-red-500 text-sm">{errors.orcamento}</p>}
+              {errors.orcamento && (
+                <p className="text-red-500 text-sm">{errors.orcamento}</p>
+              )}
             </div>
 
             <div className="flex-1">
               <Label>Data</Label>
-              <Input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} />
-              {errors.dataInicio && <p className="text-red-500 text-sm">{errors.dataInicio}</p>}
+              <Input
+                type="date"
+                value={dataInicio}
+                onChange={(e) => setDataInicio(e.target.value)}
+              />
+              {errors.dataInicio && (
+                <p className="text-red-500 text-sm">{errors.dataInicio}</p>
+              )}
             </div>
           </div>
 
-          {/* Valor e Status lado a lado */}
-          <div className="flex gap-4">
+          {/* Valor e Status */}
+          <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <Label>Valor</Label>
               <Input
@@ -184,35 +201,46 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
                 onChange={(e) => setValor(e.target.value)}
                 placeholder="Valor da comissão"
               />
-              {errors.valor && <p className="text-red-500 text-sm">{errors.valor}</p>}
+              {errors.valor && (
+                <p className="text-red-500 text-sm">{errors.valor}</p>
+              )}
             </div>
 
             <div className="flex-1">
               <Label>Status</Label>
               <select
                 value={status}
-                onChange={(e) => setStatus(e.target.value as "Pago" | "Não pago")}
+                onChange={(e) =>
+                  setStatus(e.target.value as "Pago" | "Não pago")
+                }
                 className="w-full border border-gray-300 rounded px-3 py-2"
               >
                 <option value="Pago">Pago</option>
                 <option value="Não pago">Não pago</option>
               </select>
-              {errors.status && <p className="text-red-500 text-sm">{errors.status}</p>}
+              {errors.status && (
+                <p className="text-red-500 text-sm">{errors.status}</p>
+              )}
             </div>
           </div>
 
           {/* Botões */}
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button variant="outline" onClick={onClose}>
+          <div className="flex flex-col sm:flex-row justify-end sm:space-x-2 space-y-2 sm:space-y-0 pt-4">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="w-full sm:w-auto"
+            >
               Cancelar
             </Button>
-            <Button onClick={handleSubmit} className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white rounded-md px-6"
+            <Button
+              onClick={handleSubmit}
+              className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white rounded-md px-6 w-full sm:w-auto"
             >
               {commissionToEdit ? "Salvar alterações" : "Criar comissão"}
             </Button>
           </div>
         </div>
-
       </DialogContent>
     </Dialog>
   );

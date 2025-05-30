@@ -44,7 +44,7 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-sm font-medium text-gray-500 tracking-wider"
+              className="px-6 py-3 text-left text-sm font-medium text-gray-500 tracking-wider whitespace-nowrap"
             >
               Data de início
             </th>
@@ -85,7 +85,7 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
                 </div>
               </td>
               <td className="px-6 py-3 whitespace-nowrap">
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 ">
                   {project.dataInicio}
                 </div>
               </td>
