@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import DeleteModal from '@/components/DeleteModal';
 import SearchBar from '@/components/SearchBar';
 import Toast from '@/components/Toast';
+import SolarQuoteModal from '@/components/SolarQuoteModal';
 
 
 const projectsData: Project[] = [
@@ -28,6 +29,7 @@ const Projects: React.FC = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<"success" | "error" | "info">("success");
   const [showToast, setShowToast] = useState(false);
+  const [isSolarQuoteModalOpen, setSolarQuoteModalOpen] = useState(false); // Estado para o novo modal
 
 
   useEffect(() => {
@@ -79,7 +81,9 @@ const Projects: React.FC = () => {
     setProjectModalOpen(false);
     setProjectToEdit(null);
   };
-
+  const handleOpenSolarQuoteModal = () => { // Handler para abrir o novo modal
+    setSolarQuoteModalOpen(true);
+  };
   const selectedProject = projects.find(p => p.id === selectedProjectId);
   const triggerToast = (message: string, type: "success" | "error" | "info" = "success") => {
     setToastMessage(message);
@@ -108,13 +112,21 @@ const Projects: React.FC = () => {
                 onDelete={handleDeleteClick}
               />
             </div>
-            <div className="mt-8 flex justify-end">
+            <div className="mt-8 flex flex-col-reverse sm:flex-row sm:justify-between gap-4">
+              <Button
+                className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white"
+                onClick={handleOpenSolarQuoteModal}
+              >
+                Gerar Orçamento Solar
+              </Button>
               <Button
                 className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white"
                 onClick={handleAddProjectClick}
               >
                 Adicionar projeto
               </Button>
+
+              
             </div>
           </div>
         </main>
@@ -136,6 +148,10 @@ const Projects: React.FC = () => {
         onSave={handleSaveProject}
         projectToEdit={projectToEdit}
       />
+      <SolarQuoteModal
+              isOpen={isSolarQuoteModalOpen}
+              onClose={() => setSolarQuoteModalOpen(false)}
+            />
       {showToast && (
         <Toast
           message={toastMessage}
