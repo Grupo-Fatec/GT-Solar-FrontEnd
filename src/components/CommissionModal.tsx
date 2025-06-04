@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Commission } from "../types/Commission";
 import { Label } from "@/components/ui/label";
+import { NumericFormat } from "react-number-format";
 
 interface CommissionModalProps {
   isOpen: boolean;
@@ -47,11 +48,7 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
       setDataInicio(commissionToEdit.dataInicio.split("/").reverse().join("-"));
       setValor(commissionToEdit.valor.toString());
       setStatus(commissionToEdit.status);
-    }
-  }, [commissionToEdit]);
-
-  useEffect(() => {
-    if (!isOpen) {
+    } else {
       setVendedor("");
       setCliente("");
       setOrcamento("");
@@ -67,7 +64,7 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
         status: "",
       });
     }
-  }, [isOpen]);
+  }, [commissionToEdit]);
 
   const validateForm = () => {
     let isValid = true;
@@ -96,7 +93,7 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
       newErrors.dataInicio = "Data é obrigatória";
       isValid = false;
     }
-    if (!valor || isNaN(Number(valor))) {
+    if (!valor || isNaN(Number(valor.replace(",", ".").replace("R$", "").replace(/\./g, "")))) {
       newErrors.valor = "Valor deve ser um número válido";
       isValid = false;
     }
@@ -120,11 +117,17 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
       cliente,
       orcamento: Number(orcamento),
       dataInicio: formattedDate,
-      valor: parseFloat(valor),
+      valor: parseFloat(
+        valor.replace("R$", "").replace(/\./g, "").replace(",", ".")
+      ),
       status,
     });
 
     onClose();
+  };
+
+  const handleValorChange = (values: any) => {
+    setValor(values.formattedValue);
   };
 
   return (
@@ -137,7 +140,6 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Vendedor */}
           <div>
             <Label>Vendedor</Label>
             <Input
@@ -150,7 +152,6 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
             )}
           </div>
 
-          {/* Cliente */}
           <div>
             <Label>Cliente</Label>
             <Input
@@ -163,7 +164,6 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
             )}
           </div>
 
-          {/* Orçamento e Data */}
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <Label>Orçamento</Label>
@@ -191,15 +191,17 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
             </div>
           </div>
 
-          {/* Valor e Status */}
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <Label>Valor</Label>
-              <Input
-                type="number"
+              <NumericFormat
                 value={valor}
-                onChange={(e) => setValor(e.target.value)}
-                placeholder="Valor da comissão"
+                thousandSeparator="."
+                decimalSeparator=","
+                prefix="R$ "
+                allowNegative={false}
+                onValueChange={handleValorChange}
+                className="w-full border border-gray-300 p-2 rounded-md"
               />
               {errors.valor && (
                 <p className="text-red-500 text-sm">{errors.valor}</p>
@@ -224,7 +226,6 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
             </div>
           </div>
 
-          {/* Botões */}
           <div className="flex flex-col sm:flex-row justify-end sm:space-x-2 space-y-2 sm:space-y-0 pt-4">
             <Button
               variant="outline"
