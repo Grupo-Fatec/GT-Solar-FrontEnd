@@ -40,14 +40,7 @@ const DetailsModal: React.FC<DetailsModalProps> = ({ cashFlow, onClose, onViewHi
             <p><strong>Data:</strong> {cashFlow.dataInicio}</p>
           </div>
 
-          <div className="flex justify-end mt-6">
-            <button
-              onClick={() => onViewHistory(cashFlow.tipo)}
-              className="px-4 py-2 bg-[#4F8A6E] hover:bg-[#2B5337] text-white rounded transition text-sm sm:text-base"
-            >
-              Visualizar histórico do tipo
-            </button>
-          </div>
+         
         </div>
       </DialogContent>
     </Dialog>
