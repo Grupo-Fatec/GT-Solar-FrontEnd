@@ -117,7 +117,7 @@ const handleViewHistory = (vendedor: string) => {
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder="Pesquisar nome do cliente"
+                placeholder="Pesquisar nome do vendedor"
               />
             </div>
             <div className="bg-white rounded-lg shadow">

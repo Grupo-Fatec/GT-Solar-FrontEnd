@@ -85,10 +85,16 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
       newErrors.cliente = "Cliente é obrigatório";
       isValid = false;
     }
-    if (!orcamento || isNaN(Number(orcamento))) {
+    if (
+      !orcamento ||
+      isNaN(
+        Number(orcamento.replace("R$", "").replace(/\./g, "").replace(",", "."))
+      )
+    ) {
       newErrors.orcamento = "Orçamento deve ser um número válido";
       isValid = false;
     }
+
     if (!dataInicio) {
       newErrors.dataInicio = "Data é obrigatória";
       isValid = false;
@@ -115,7 +121,10 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
       id: commissionToEdit ? commissionToEdit.id : Math.random(),
       vendedor,
       cliente,
-      orcamento: Number(orcamento),
+      orcamento: parseFloat(
+  orcamento.replace("R$", "").replace(/\./g, "").replace(",", ".")
+),
+
       dataInicio: formattedDate,
       valor: parseFloat(
         valor.replace("R$", "").replace(/\./g, "").replace(",", ".")
@@ -167,12 +176,16 @@ const CommissionModal: React.FC<CommissionModalProps> = ({
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <Label>Orçamento</Label>
-              <Input
-                type="number"
+              <NumericFormat
                 value={orcamento}
-                onChange={(e) => setOrcamento(e.target.value)}
-                placeholder="Número do orçamento"
+                thousandSeparator="."
+                decimalSeparator=","
+                prefix="R$ "
+                allowNegative={false}
+                onValueChange={(values) => setOrcamento(values.formattedValue)}
+                className="w-full border border-gray-300 p-2 rounded-md"
               />
+
               {errors.orcamento && (
                 <p className="text-red-500 text-sm">{errors.orcamento}</p>
               )}

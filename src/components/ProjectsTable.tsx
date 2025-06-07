@@ -18,13 +18,19 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
   const [selectedProjects, setSelectedProjects] = useState<number[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const ITEMS_PER_PAGE = 7;
+  const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentItems = projects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const toggleProjectSelection = (projectId: number) => {
-    if (selectedProjects.includes(projectId)) {
-      setSelectedProjects(selectedProjects.filter((id) => id !== projectId));
-    } else {
-      setSelectedProjects([...selectedProjects, projectId]);
-    }
+    setSelectedProjects((prev) =>
+      prev.includes(projectId)
+        ? prev.filter((id) => id !== projectId)
+        : [...prev, projectId]
+    );
   };
 
   const handleViewDetails = (project: Project) => {
@@ -37,37 +43,37 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
     setSelectedProject(null);
   };
 
+  const goToPreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const goToNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
-            <th scope="col" className="w-12 px-3 py-3 text-left">
+            <th className="w-12 px-3 py-3 text-left">
               <input
                 type="checkbox"
                 className="h-4 w-4 rounded border-gray-300"
                 onChange={() => {}}
               />
             </th>
-            <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 tracking-wider">
-              Nome
-            </th>
-            <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 tracking-wider whitespace-nowrap">
-              Data de início
-            </th>
-            <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 tracking-wider">
-              Valor
-            </th>
-            <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 tracking-wider">
-              Status
-            </th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">Nome</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 whitespace-nowrap">Data de início</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">Valor</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">Status</th>
             <th className="relative px-6 py-3 text-sm font-medium text-gray-500">
               <span className="sr-only">Ações</span>
             </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {projects.map((project) => (
+          {currentItems.map((project) => (
             <tr key={project.id} className="hover:bg-gray-50">
               <td className="px-3 py-3 whitespace-nowrap">
                 <input
@@ -77,18 +83,14 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
                   onChange={() => toggleProjectSelection(project.id)}
                 />
               </td>
-              <td className="px-6 py-3 whitespace-nowrap">
-                <div className="text-sm font-medium text-gray-900">
-                  {project.cliente}
-                </div>
+              <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                {project.cliente}
               </td>
-              <td className="px-6 py-3 whitespace-nowrap">
-                <div className="text-sm text-gray-500">{project.dataInicio}</div>
+              <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
+                {project.dataInicio}
               </td>
-              <td className="px-6 py-3 whitespace-nowrap">
-                <div className="text-sm text-gray-900">
-                  R$ {project.valor.toLocaleString("pt-BR")}
-                </div>
+              <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-900">
+                R$ {project.valor.toLocaleString("pt-BR")}
               </td>
               <td className="px-6 py-3 whitespace-nowrap">
                 <StatusBadge status={project.status} />
@@ -118,7 +120,6 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
         </tbody>
       </table>
 
-      {/* Modal de Detalhes */}
       {selectedProject && (
         <ProjectDetailsModal
           project={selectedProject}
@@ -126,6 +127,39 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
           onClose={handleCloseModal}
         />
       )}
+
+      <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200">
+        <p className="text-sm text-gray-700">
+          Exibindo{" "}
+          <span className="font-medium">{startIndex + 1}</span> a{" "}
+          <span className="font-medium">
+            {Math.min(startIndex + ITEMS_PER_PAGE, projects.length)}
+          </span>{" "}
+          de <span className="font-medium">{projects.length}</span> resultados
+        </p>
+        <nav
+          className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+          aria-label="Pagination"
+        >
+          <button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+          >
+            ←
+          </button>
+          <span className="px-4 py-2 border border-gray-300 bg-white text-sm text-gray-700">
+            Página {currentPage} de {totalPages}
+          </span>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+          >
+            →
+          </button>
+        </nav>
+      </div>
     </div>
   );
 };

@@ -17,6 +17,13 @@ const CommissionsTable: React.FC<CommissionsTableProps> = ({
   onView,
 }) => {
   const [selectedCommissions, setSelectedCommissions] = useState<number[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const ITEMS_PER_PAGE = 7;
+
+  const totalPages = Math.ceil(commissions.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentItems = commissions.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const toggleCommissionSelection = (commissionId: number) => {
     setSelectedCommissions((prevSelected) =>
@@ -24,6 +31,14 @@ const CommissionsTable: React.FC<CommissionsTableProps> = ({
         ? prevSelected.filter((id) => id !== commissionId)
         : [...prevSelected, commissionId]
     );
+  };
+
+  const goToPreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const goToNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
 
   return (
@@ -46,13 +61,11 @@ const CommissionsTable: React.FC<CommissionsTableProps> = ({
             <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
               Status
             </th>
-            <th className="px-6 py-3 text-right text-sm font-medium text-gray-500">
-              
-            </th>
+            <th className="px-6 py-3 text-right text-sm font-medium text-gray-500"></th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {commissions.map((commission) => (
+          {currentItems.map((commission) => (
             <tr key={commission.id} className="hover:bg-gray-50">
               <td className="px-3 py-3">
                 <input
@@ -97,6 +110,38 @@ const CommissionsTable: React.FC<CommissionsTableProps> = ({
           ))}
         </tbody>
       </table>
+      <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200">
+        <p className="text-sm text-gray-700">
+          Exibindo{" "}
+          <span className="font-medium">{startIndex + 1}</span> a{" "}
+          <span className="font-medium">
+            {Math.min(startIndex + ITEMS_PER_PAGE, commissions.length)}
+          </span>{" "}
+          de <span className="font-medium">{commissions.length}</span> resultados
+        </p>
+        <nav
+          className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+          aria-label="Pagination"
+        >
+          <button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+          >
+            ←
+          </button>
+          <span className="px-4 py-2 border border-gray-300 bg-white text-sm text-gray-700">
+            Página {currentPage} de {totalPages}
+          </span>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+          >
+            →
+          </button>
+        </nav>
+      </div>
     </div>
   );
 };
