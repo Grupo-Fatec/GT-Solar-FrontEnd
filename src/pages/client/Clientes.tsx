@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/SearchBar";
-import ClientTable from "../components/client/ClientTable";
-import { ClientForm } from "../components/client/ClientForm";
-import { DeleteConfirmationDialog } from "../components/DeleteConfirmationDialog";
-import { IClient } from "@/interfaces/IClient";
+import ClientTable from "../../components/client/ClientTable";
+import { ClientForm } from "../../components/client/ClientForm";
+import { DeleteConfirmationDialog } from "../../components/DeleteConfirmationDialog";
+import { IClient } from "@/interfaces/person/client/IClient";
 import { ModalComponent } from "@/components/ModalComponent";
 import { emptyClient } from "@/utils/emptyObjects/Client.empty.obj";
 import { ClientService } from "@/services/ClientService";
