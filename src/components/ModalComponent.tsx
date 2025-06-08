@@ -24,12 +24,10 @@ export function ModalComponent({
 }: ModalComponentProps) {
   return (
     <Dialog open={isOpen} onOpenChange={close}>
-      <DialogContent className="max-w-4xl p-8 rounded-2xl">
+      <DialogContent className="max-w-4xl p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="flex justify-between items-center">
-          <DialogTitle className="text-xl">{title}</DialogTitle>
-          <DialogDescription>{subtitle}</DialogDescription>
         </DialogHeader>
-        <main>{children}</main>
+        <main className="mt-4">{children}</main>
       </DialogContent>
     </Dialog>
   );

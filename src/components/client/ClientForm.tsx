@@ -126,3 +126,4 @@ export function ClientForm({ clientData, onChange, onSubmit }: ClientFormProps) 
     </Card>
   );
 }
+
