@@ -16,4 +16,5 @@ export const menuItems: IMenuItems[] = [
   { icon: DollarSign, label: "Comissões", path: "/pages/comissoes" },
   { icon: PiggyBank, label: "Fluxo de caixa", path: "/pages/fluxo-de-caixa" },
   
+  
 ];
