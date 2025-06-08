@@ -49,7 +49,7 @@ const BudgetsTable: React.FC<BudgetsTableProps> = ({
             <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
               Nome
             </th>
-            <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 whitespace-nowrap">
               Data de início
             </th>
             <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
@@ -75,7 +75,7 @@ const BudgetsTable: React.FC<BudgetsTableProps> = ({
                 />
               </td>
               <td className="px-6 py-3">
-                <div className="text-sm font-medium text-gray-900">
+                <div className="text-sm font-medium text-gray-900 whitespace-nowrap">
                   {budget.cliente}
                 </div>
               </td>
@@ -83,7 +83,7 @@ const BudgetsTable: React.FC<BudgetsTableProps> = ({
                 <div className="text-sm text-gray-500">{budget.dataInicio}</div>
               </td>
               <td className="px-6 py-3">
-                <div className="text-sm text-gray-900">
+                <div className="text-sm text-gray-900 whitespace-nowrap">
                   R$ {budget.valor.toLocaleString("pt-BR")}
                 </div>
               </td>
