@@ -61,6 +61,16 @@ export const routes: RouterRaw[] = [
         component: () => import("@/pages/Orcamentos"), // ajuste conforme nome real do arquivo
       },
       {
+        title: "commissions",
+        path: "comissoes",
+        component: () => import("@/pages/Commissions")
+      },
+      {
+        title: "cashflow",
+        path: "fluxo-de-caixa",
+        component: () => import("@/pages/FluxoDeCaixa")
+      },
+      {
       title: "sair",
       path: "logout",
       component: () => import("@/pages/Logout"),
