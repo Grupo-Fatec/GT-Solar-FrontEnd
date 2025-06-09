@@ -1,3 +1,6 @@
+import Modal from "@/components/patterns/Modal";
+import { DialogHeader } from "@/components/ui/dialog";
+import { Form } from "@/components/ui/form";
 import {
   Table,
   TableBody,
@@ -148,6 +151,9 @@ const Suppliers = () => {
                   {s.name}
                 </TableCell>
                 <TableCell className="text-center text-gray-700">
+                  {new Date(s.deliveryDate).toLocaleDateString() +
+                    " - " +
+                    new Date(s.deliveryDate).toLocaleTimeString()}
                   {new Date(s.deliveryDate).toLocaleDateString() +
                     " - " +
                     new Date(s.deliveryDate).toLocaleTimeString()}

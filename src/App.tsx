@@ -20,6 +20,7 @@ import NotFound from "@/pages/NotFound";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Suppliers from "./pages/supplier/Suppliers";
+import Supplier from "./pages/supplier/Supplier";
 
 const queryClient = new QueryClient();
 
@@ -83,6 +84,12 @@ const App = () => (
             path="/pages/suppliers"
             element={
               <Suppliers/>
+            }
+            />
+             <Route 
+            path="/pages/suppliers/:id"
+            element={
+              <Supplier/>
             }
             />
           </Route>
