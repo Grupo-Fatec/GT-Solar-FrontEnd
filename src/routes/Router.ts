@@ -56,9 +56,14 @@ export const routes: RouterRaw[] = [
         component: () => import("@/pages/projects/Projects")
       },
       {
+        title: "fornecedores",
+        path: "fornecedores",
+        component: () => import("@/pages/supplier/Suppliers"), 
+      },
+      {
         title: "Orçamentos",
         path: "orcamentos",
-        component: () => import("@/pages/budgets/Orcamentos"), // ajuste conforme nome real do arquivo
+        component: () => import("@/pages/budgets/Orcamentos"), 
       },
       {
       title: "sair",
