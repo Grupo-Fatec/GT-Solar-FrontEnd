@@ -46,12 +46,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
       setDataInicio('');
       setValor('');
       setStatus('Execução');
-      setErrors({
-        nome: '',
-        dataInicio: '',
-        valor: '',
-        status: '',
-      });
+      setErrors({ nome: '', dataInicio: '', valor: '', status: '' });
     }
   }, [isOpen]);
 
@@ -92,12 +87,11 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
       isValid = false;
     }
 
-    setErrors(newErrors); // Atualiza o estado de erros
+    setErrors(newErrors);
     return isValid;
   };
 
   const handleSubmit = () => {
-    // Chama a validação ao clicar em "Salvar"
     if (!validateForm()) return;
 
     const [year, month, day] = dataInicio.split('-');
@@ -116,26 +110,29 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl p-8 rounded-2xl">
-        <DialogHeader className="flex justify-between items-center">
-          <DialogTitle className="text-xl">
+      <DialogContent className="max-w-2xl p-6 sm:p-8 rounded-2xl bg-white">
+        <DialogHeader className="flex justify-between items-center mb-4">
+          <DialogTitle className="text-lg sm:text-xl font-semibold">
             {projectToEdit ? 'Editar Projeto' : 'Cadastrar Projeto'}
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-6 mt-6">
 
+        <div className="space-y-5">
+
+          {/* Nome */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
             <Input 
-              placeholder="Nome" 
-              value={nome} 
-              onChange={(e) => setNome(e.target.value)} 
+              placeholder="Nome do Cliente"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
             />
             {errors.nome && <p className="text-red-500 text-sm">{errors.nome}</p>}
           </div>
 
-          <div className="flex gap-4">
-            <div className="w-1/2">
+          {/* Data e Valor */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="w-full">
               <label className="block text-sm font-medium text-gray-700 mb-1">Data de Início</label>
               <Input
                 type="date"
@@ -144,7 +141,8 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
               />
               {errors.dataInicio && <p className="text-red-500 text-sm">{errors.dataInicio}</p>}
             </div>
-            <div className="w-1/2">
+
+            <div className="w-full">
               <label className="block text-sm font-medium text-gray-700 mb-1">Valor</label>
               <NumericFormat
                 value={valor}
@@ -153,16 +151,17 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
                 prefix="R$ "
                 allowNegative={false}
                 onValueChange={handleValorChange}
-                className="w-full border border-gray-300 p-2 rounded-md"
+                className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4F8A6E]"
               />
               {errors.valor && <p className="text-red-500 text-sm">{errors.valor}</p>}
             </div>
           </div>
 
+          {/* Status */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
             <select
-              className="w-full border border-gray-300 p-2 rounded-md"
+              className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4F8A6E]"
               value={status}
               onChange={(e) => setStatus(e.target.value as 'Execução' | 'Finalização' | 'Planejamento')}
             >
@@ -173,10 +172,11 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
             {errors.status && <p className="text-red-500 text-sm">{errors.status}</p>}
           </div>
 
-          <div className="flex justify-end pt-4">
+          {/* Botão */}
+          <div className="flex justify-end">
             <Button
               onClick={handleSubmit}
-              className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white rounded-md px-6"
+              className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white rounded-md px-6 py-2 transition-colors duration-200"
             >
               {projectToEdit ? 'Salvar Alterações' : 'Salvar'}
             </Button>
@@ -189,4 +189,3 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 };
 
 export default ProjectModal;
-

@@ -1,27 +1,19 @@
-import ProjectModal from '@/components/ProjectModal';
 import { useEffect, useState } from 'react';
 import { Project } from "@/types/Project";
+import ProjectModal from '@/components/ProjectModal';
 import ProjectsTable from '@/components/ProjectsTable';
 import { Button } from '@/components/ui/button';
 import DeleteModal from '@/components/DeleteModal';
 import SearchBar from '@/components/SearchBar';
 import Toast from '@/components/Toast';
+
 import SolarQuoteModal from '@/components/SolarQuoteModal';
-
-
-const projectsData: Project[] = [
-  { id: 1, cliente: 'Carla Pereira da Silva', dataInicio: '11/03/2025', valor: 8000, status: 'Execução' },
-  { id: 2, cliente: 'Augusto Souza ', dataInicio: '27/02/2018', valor: 8000, status: 'Finalização' },
-  { id: 3, cliente: 'Lais Cardoso ', dataInicio: '30/01/2022', valor: 8000, status: 'Planejamento' },
-  { id: 4, cliente: 'Humberto Gonçalves', dataInicio: '09/11/2025', valor: 8000, status: 'Execução' },
-  { id: 5, cliente: 'Luana Carvalho', dataInicio: '12/05/2023', valor: 8000, status: 'Finalização' },
-  { id: 6, cliente: 'Bruno Ribeiro Silva', dataInicio: '15/12/20254', valor: 8000, status: 'Planejamento' },
-  
-];
+import { ProjectService } from '@/services/ProjectService';
 
 const Projects: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [projects, setProjects] = useState<Project[]>(projectsData);
+  const [allProjects, setAllProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isProjectModalOpen, setProjectModalOpen] = useState(false);
@@ -29,25 +21,42 @@ const Projects: React.FC = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<"success" | "error" | "info">("success");
   const [showToast, setShowToast] = useState(false);
-  const [isSolarQuoteModalOpen, setSolarQuoteModalOpen] = useState(false); // Estado para o novo modal
+  const [isSolarQuoteModalOpen, setSolarQuoteModalOpen] = useState(false);
 
+  useEffect(() => {
+    fetchProjects();
+  }, []);
 
   useEffect(() => {
     if (searchQuery) {
-      const filtered = projectsData.filter((project) =>
+      const filtered = allProjects.filter(project =>
         project.cliente.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setProjects(filtered);
     } else {
-      setProjects(projectsData);
+      setProjects(allProjects);
     }
-  }, [searchQuery]);
+  }, [searchQuery, allProjects]);
 
-  const handleEditProject = (projectId: number) => {
-    const project = projects.find(p => p.id === projectId);
-    if (project) {
+  const fetchProjects = async () => {
+    try {
+      const data = await ProjectService.getAll();
+      setAllProjects(data);
+      setProjects(data);
+    } catch (error) {
+      console.error("Erro ao buscar projetos:", error);
+      triggerToast("Erro ao buscar projetos", "error");
+    }
+  };
+
+  const handleEditProject = async (projectId: number) => {
+    try {
+      const project = await ProjectService.getById(projectId);
       setProjectToEdit(project);
       setProjectModalOpen(true);
+    } catch (error) {
+      console.error("Erro ao buscar projeto:", error);
+      triggerToast("Erro ao buscar projeto", "error");
     }
   };
 
@@ -61,35 +70,51 @@ const Projects: React.FC = () => {
     setDeleteModalOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (selectedProjectId !== null) {
-      setProjects(projects.filter((project) => project.id !== selectedProjectId));
-      setSelectedProjectId(null);
-      setDeleteModalOpen(false);
-      triggerToast('Projeto projeto com sucesso!', 'success');
+      try {
+        await ProjectService.delete(selectedProjectId);
+        setDeleteModalOpen(false);
+        setSelectedProjectId(null);
+        fetchProjects();
+        triggerToast('Projeto excluído com sucesso!', 'success');
+      } catch (error) {
+        console.error("Erro ao deletar projeto:", error);
+        triggerToast("Erro ao deletar projeto", "error");
+      }
     }
   };
 
-  const handleSaveProject = (project: Project) => {
-    if (projectToEdit) {
-      setProjects(projects.map(p => p.id === project.id ? project : p));
-      triggerToast('Projeto editado com sucesso!', 'success');
-    } else {
-      setProjects([...projects, project]);
-      triggerToast('Projeto cadastrado com sucesso!', 'success');
+  const handleSaveProject = async (project: Project) => {
+    try {
+      if (projectToEdit) {
+        await ProjectService.update(project.id, project);
+        triggerToast('Projeto editado com sucesso!', 'success');
+      } else {
+        await ProjectService.create(project);
+        triggerToast('Projeto cadastrado com sucesso!', 'success');
+      }
+      setProjectModalOpen(false);
+      setProjectToEdit(null);
+      fetchProjects();
+    } catch (error) {
+      console.error("Erro ao salvar projeto:", error);
+      triggerToast("Erro ao salvar projeto", "error");
     }
-    setProjectModalOpen(false);
-    setProjectToEdit(null);
   };
-  const handleOpenSolarQuoteModal = () => { // Handler para abrir o novo modal
+
+  const handleOpenSolarQuoteModal = () => {
     setSolarQuoteModalOpen(true);
   };
+
   const selectedProject = projects.find(p => p.id === selectedProjectId);
+
   const triggerToast = (message: string, type: "success" | "error" | "info" = "success") => {
     setToastMessage(message);
     setToastType(type);
     setShowToast(true);
   };
+
   return (
     <div className="flex h-screen">
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -125,14 +150,11 @@ const Projects: React.FC = () => {
               >
                 Adicionar projeto
               </Button>
-
-              
             </div>
           </div>
         </main>
       </div>
 
-      {/* Modal de exclusão genérico */}
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
@@ -141,17 +163,18 @@ const Projects: React.FC = () => {
         description={`Tem certeza que deseja excluir o projeto de ${selectedProject?.cliente}?`}
       />
 
-      {/* Modal de criação/edição */}
       <ProjectModal
         isOpen={isProjectModalOpen}
         onClose={() => setProjectModalOpen(false)}
         onSave={handleSaveProject}
         projectToEdit={projectToEdit}
       />
+
       <SolarQuoteModal
-              isOpen={isSolarQuoteModalOpen}
-              onClose={() => setSolarQuoteModalOpen(false)}
-            />
+        isOpen={isSolarQuoteModalOpen}
+        onClose={() => setSolarQuoteModalOpen(false)}
+      />
+
       {showToast && (
         <Toast
           message={toastMessage}

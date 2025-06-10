@@ -139,7 +139,7 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
         </p>
         <nav
           className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-          aria-label="Pagination"
+          aria-label="Paginação"
         >
           <button
             onClick={goToPreviousPage}

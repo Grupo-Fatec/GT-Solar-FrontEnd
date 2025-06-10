@@ -2,7 +2,6 @@ import React from "react";
 import { Project } from "../types/Project";
 import StatusBadge from "./StatusBadge";
 
-
 interface ProjectDetailsModalProps {
   project: Project;
   isOpen: boolean;
@@ -47,7 +46,7 @@ const ProjectDetailsModal: React.FC<ProjectDetailsModalProps> = ({
             <strong className="text-gray-900">Status:</strong>{" "}
             <StatusBadge status={project.status} />
           </p>
-          {/* Adicione mais campos se necessário */}
+          {/* Adicione mais campos aqui se precisar */}
         </div>
       </div>
     </div>
