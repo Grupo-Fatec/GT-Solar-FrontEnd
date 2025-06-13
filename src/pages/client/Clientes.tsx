@@ -22,19 +22,6 @@ const Clientes = () => {
 
   const [clientToDeleteId, setClientToDeleteId] = useState<string | null>(null);
 
-  // Buscar todos os clientes ao carregar
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const data = await clientService.getAll();
-        setClientList(data);
-      } catch (error) {
-        console.error("Erro ao buscar clientes:", error);
-      }
-    }
-    fetchClients();
-  }, []);
-
   const fetchClients = async () => {
     try {
       const data = await clientService.getAll();
@@ -103,6 +90,18 @@ const Clientes = () => {
     setDeleteModal(true);
   };
 
+  // Buscar todos os clientes ao carregar
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const data = await clientService.getAll();
+        setClientList(data);
+      } catch (error) {
+        console.error("Erro ao buscar clientes:", error);
+      }
+    };
+    fetchClients();
+  }, []);
   return (
     <div className="flex h-screen">
       {!showForm ? (

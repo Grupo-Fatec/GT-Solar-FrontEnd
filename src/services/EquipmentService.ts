@@ -1,13 +1,14 @@
 import { AxiosInstance } from "axios";
 import { IEquipments } from "@/interfaces/supplier/IEquipments";
+import api from "@/boot/AxiosConfig";
 
 export class EquipmentService {
   private path: string;
   private axiosApi: AxiosInstance;
 
-  constructor(axiosApi: AxiosInstance) {
+  constructor() {
     this.path = "/equipments";
-    this.axiosApi = axiosApi;
+    this.axiosApi = api;
   }
 
   // ----- CREATE -----

@@ -9,7 +9,7 @@ type ModalType = {
   confirmColor: string;
   onConfirm: () => void;
   onClose: () => void;
-  children: ReactNode;
+  children?: ReactNode;
   icon?: ReactNode;
 };
 

@@ -29,8 +29,9 @@ export class SupplierService {
     return response.data;
   }
 
-  async delete(id: string): Promise<void> {
-    await this.axiosApi.delete(`${this.baseUrl}/${id}`);
+  async delete(id: string): Promise<any> {
+    const res = await this.axiosApi.delete(`${this.baseUrl}/${id}`);
+    return res;
   }
 
   async deleteMany(ids: string[]): Promise<void> {
