@@ -21,7 +21,10 @@ import NotFound from "@/pages/NotFound";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Suppliers from "./pages/supplier/Suppliers";
 import Supplier from "./pages/supplier/Supplier";
-import Equipment from "./pages/supplier/Equipment";
+import Equipment from "./pages/supplier/equipment/Equipment";
+import Equipments from "./pages/supplier/equipment/Equipments";
+import Engineers from "./pages/persons/enginner/Engineers";
+import Engineer from "./pages/persons/enginner/Engineer";
 
 const queryClient = new QueryClient();
 
@@ -88,7 +91,12 @@ const App = () => (
 
             {/* Equipments routes */}
 
-            <Route path="/pages/equipment/:id" element={<Equipment/>} />
+            <Route path="/pages/equipment/:id" element={<Equipment />} />
+            <Route path="/pages/equipments" element={<Equipments />} />
+
+            {/* Rotas para persons(engineer e installer) */}
+            <Route path="/pages/engineers" element={<Engineers />} />
+            <Route path="/pages/engineers/:id" element={<Engineer />} />
           </Route>
 
           {/* Página 404 */}

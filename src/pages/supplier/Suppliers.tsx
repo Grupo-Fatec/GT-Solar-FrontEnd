@@ -70,7 +70,7 @@ const Suppliers = () => {
 
   const handleDeleteModal = async () => {
     const res = await service.delete(supplier.id);
-    if(res.status !== 204){
+    if (res.status !== 204) {
       setDeleteModal(false);
       setSupplier(emptySupplier);
       alert("Erro ao deletar fornecedor. Tente novamente.");
@@ -114,6 +114,11 @@ const Suppliers = () => {
               >
                 <TableCell className="text-center">
                   <input type="checkbox" />
+                </TableCell>
+                <TableCell className="text-center text-gray-700">
+                  {s.id.length > 5
+                    ? s.id.slice(s.id.length - 5, s.id.length) + "..."
+                    : s.id}
                 </TableCell>
                 <TableCell
                   className="text-center font-medium text-gray-800"
@@ -207,7 +212,7 @@ const Suppliers = () => {
                 required
               />
             </div>
-          </form> 
+          </form>
         </Modal>
 
         {/* atualizar Fornecedor */}
