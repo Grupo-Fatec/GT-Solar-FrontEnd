@@ -1,13 +1,14 @@
 import { AxiosInstance } from "axios";
 import { IInsertAdmin, IAdmin } from "@/interfaces/person/admin/IAdmin";
+import api from "@/boot/AxiosConfig";
 
 export class AdminService {
   private path: string;
   private axiosApi: AxiosInstance;
 
-  constructor(axiosApi: AxiosInstance) {
+  constructor() {
     this.path = "/admins";
-    this.axiosApi = axiosApi;
+    this.axiosApi = api;
   }
 
   async create(admin: IInsertAdmin): Promise<IAdmin> {

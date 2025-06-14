@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import Modal from "@/components/patterns/Modal";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
+import { Pencil, Trash2 } from "lucide-react";
 
 const Engineers = () => {
   const navigate = useNavigate();
@@ -27,46 +28,66 @@ const Engineers = () => {
     valuePerKwh: 0,
     projects: [],
   };
+
   const [engineers, setEngineers] = useState<IEngineer[]>([]);
   const [engineer, setEngineer] = useState<IEngineer>(emptyEngineer);
-
   const [createModal, setCreateModal] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const goTo = (route: string) => {
     navigate(route);
   };
 
   const onCreate = () => {
-    setCreateModal(true);
     setEngineer(emptyEngineer);
+    setIsEditing(false);
+    setCreateModal(true);
   };
 
   const handleCreate = async () => {
-    alert(engineer.name.length);
     const res = await service.createEngineer(engineer);
-    
-
     if (!res) {
-      alert("Deu erro mermão");
+      alert("Erro ao criar engenheiro");
+      return;
     }
-    engineers.push(res);
+    setEngineers([...engineers, res]);
     setEngineer(emptyEngineer);
     setCreateModal(false);
+  };
+
+  const handleEdit = async () => {
+    const res = await service.updateEngineer(engineer.id, engineer);
+    if (!res) {
+      alert("Erro ao editar engenheiro");
+      return;
+    }
+    const updated = engineers.map((eng) => (eng.id === res.id ? res : eng));
+    setEngineers(updated);
+    setEngineer(emptyEngineer);
+    setIsEditing(false);
+    setCreateModal(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!id) return;
+    await service.deletePerson(id);
+    setEngineers(engineers.filter((eng) => eng.id !== id));
   };
 
   useEffect(() => {
     const fetchEngineers = async () => {
       const data = await service.findAllEngineers();
       setEngineers(data);
-      console.log(data);
     };
     fetchEngineers();
   }, []);
+
   return (
     <main className="p-10">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Engenheiros</h1>
       </div>
+
       <div className="border rounded-lg shadow-sm overflow-hidden">
         <Table>
           <TableHeader className="bg-gray-50">
@@ -75,9 +96,10 @@ const Engineers = () => {
                 <input type="checkbox" />
               </TableHead>
               <TableHead className="text-center">CREA</TableHead>
-              <TableHead className="text-center">name</TableHead>
-              <TableHead className="text-center">email</TableHead>
-              <TableHead className="text-center">valuePerKwh</TableHead>
+              <TableHead className="text-center">Nome</TableHead>
+              <TableHead className="text-center">Email</TableHead>
+              <TableHead className="text-center">Valor por kWh</TableHead>
+              <TableHead className="text-center"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -102,6 +124,27 @@ const Engineers = () => {
                 <TableCell className="text-center text-gray-700">
                   {e.valuePerKwh}
                 </TableCell>
+                <TableCell
+                  className="text-center space-x-2"
+                  onClick={(ev) => ev.stopPropagation()}
+                >
+                  <button
+                    onClick={() => {
+                      setEngineer(e);
+                      setIsEditing(true);
+                      setCreateModal(true);
+                    }}
+                    className="text-gray-400 hover:text-blue-500"
+                  >
+                    <Pencil size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(e.id)}
+                    className="text-gray-400 hover:text-red-500"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -112,7 +155,7 @@ const Engineers = () => {
         <div className="mt-8 flex justify-end">
           <Button
             className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white"
-            onClick={() => onCreate()}
+            onClick={onCreate}
           >
             Adicionar Engenheiro
           </Button>
@@ -120,14 +163,21 @@ const Engineers = () => {
       </section>
 
       <section>
-        {/* Modal actions */}
         <Modal
-          title="Criar novo engenheiro"
-          description="Vamos adicionar um novo engenheiro a GT-solar"
+          title={isEditing ? "Editar engenheiro" : "Criar novo engenheiro"}
+          description={
+            isEditing
+              ? "Atualize os dados do engenheiro"
+              : "Vamos adicionar um novo engenheiro à GT-solar"
+          }
           isOpen={createModal}
-          onClose={() => setCreateModal(false)}
-          onConfirm={() => handleCreate()}
-          confirmLabel="Salvar"
+          onClose={() => {
+            setCreateModal(false);
+            setEngineer(emptyEngineer);
+            setIsEditing(false);
+          }}
+          onConfirm={() => (isEditing ? handleEdit() : handleCreate())}
+          confirmLabel={isEditing ? "Atualizar" : "Salvar"}
           confirmColor="bg-[#4F8A6E] hover:bg-[#2B5337] text-white"
         >
           <form action="POST" className="flex flex-col gap-5 w-[100%] p-3">
@@ -146,11 +196,11 @@ const Engineers = () => {
             </div>
 
             <div>
-              <label htmlFor="Nome">Crea do Engenheiro</label>
+              <label htmlFor="Crea">Crea do Engenheiro</label>
               <Input
                 className="p-3 focus:border-none"
                 type="text"
-                placeholder="crea"
+                placeholder="CREA"
                 value={engineer.crea}
                 onChange={(e) =>
                   setEngineer({ ...engineer, crea: e.target.value })
@@ -160,7 +210,7 @@ const Engineers = () => {
             </div>
 
             <div>
-              <label htmlFor="Nome">email do Engenheiro</label>
+              <label htmlFor="Email">Email do Engenheiro</label>
               <Input
                 className="p-3 focus:border-none"
                 type="email"
@@ -174,12 +224,12 @@ const Engineers = () => {
             </div>
 
             <div>
-              <label htmlFor="Nome">valor por KWH do Engenheiro</label>
+              <label htmlFor="Valor">Valor por KWH</label>
               <Input
                 className="p-3 focus:border-none"
                 type="number"
-                placeholder="Digite apenas o valor utilizando números"
-                value={engineer.valuePerKwh == 0 ? "" : engineer.valuePerKwh}
+                placeholder="Digite apenas números"
+                value={engineer.valuePerKwh === 0 ? "" : engineer.valuePerKwh}
                 onChange={(e) =>
                   setEngineer({
                     ...engineer,

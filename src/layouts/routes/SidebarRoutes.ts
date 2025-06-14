@@ -13,7 +13,7 @@ import {
 
 export const menuItems: IMenuItems[] = [
   { icon: Home, label: "Home", path: "/pages" },
-  { icon: Users, label: "Cliente", path: "/pages/clientes" },
+  { icon: Users, label: "Cliente", path: "/pages/clients" },
   { icon: HardHat, label: "Engenheiros", path: "/pages/engineers" },
   { icon: Wrench, label: "Instaladores", path: "/pages/installers" },
   { icon: Truck, label: "Fornecedores", path: "/pages/suppliers" },

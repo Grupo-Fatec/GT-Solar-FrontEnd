@@ -25,6 +25,9 @@ import Equipment from "./pages/supplier/equipment/Equipment";
 import Equipments from "./pages/supplier/equipment/Equipments";
 import Engineers from "./pages/persons/enginner/Engineers";
 import Engineer from "./pages/persons/enginner/Engineer";
+import Installers from "./pages/persons/installer/Installers";
+import Installer from "./pages/persons/installer/Installer";
+import Project from "./pages/projects/Project";
 
 const queryClient = new QueryClient();
 
@@ -53,18 +56,27 @@ const App = () => (
               }
             />
             <Route
-              path="/pages/clientes"
+              path="/pages/clients"
               element={
                 <ProtectedRoute>
                   <Clientes />
                 </ProtectedRoute>
               }
             />
+            {/* Projetos */}
             <Route
               path="/pages/projects"
               element={
                 <ProtectedRoute>
                   <Projects />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pages/projects/:id"
+              element={
+                <ProtectedRoute>
+                  <Project />
                 </ProtectedRoute>
               }
             />
@@ -76,6 +88,7 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            
             <Route
               path="/pages/logout"
               element={
@@ -94,9 +107,13 @@ const App = () => (
             <Route path="/pages/equipment/:id" element={<Equipment />} />
             <Route path="/pages/equipments" element={<Equipments />} />
 
-            {/* Rotas para persons(engineer e installer) */}
+            {/* Rotas para persons(engineer) */}
             <Route path="/pages/engineers" element={<Engineers />} />
             <Route path="/pages/engineers/:id" element={<Engineer />} />
+
+            {/* Rotas para person(installer) */}
+            <Route path="/pages/installers" element={<Installers />} />
+            <Route path="/pages/installer/:id" element={<Installer />} />
           </Route>
 
           {/* Página 404 */}

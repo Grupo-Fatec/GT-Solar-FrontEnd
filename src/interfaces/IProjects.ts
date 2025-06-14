@@ -1,3 +1,4 @@
+import { StatusEnum } from "@/enums/StatusEnum";
 import { IAdmin } from "./person/admin/IAdmin";
 import { IClient } from "./person/client/IClient";
 import { IEngineer } from "./person/IEngineer";
@@ -18,6 +19,7 @@ export interface IProject {
 }
 
 export interface IInsertProject {
+  id: string;
   name: string;
   clientId: string;
   engineerId: string;

@@ -1,13 +1,14 @@
 import { AxiosInstance } from "axios";
 import { IProject, IInsertProject } from "@/interfaces/IProjects";
+import api from "@/boot/AxiosConfig";
 
 export class ProjectService {
   private path: string;
   private axiosApi: AxiosInstance;
 
-  constructor(axiosApi: AxiosInstance) {
+  constructor() {
     this.path = "/projects";
-    this.axiosApi = axiosApi;
+    this.axiosApi = api;
   }
 
   async getAll(): Promise<IProject[]> {
@@ -16,7 +17,7 @@ export class ProjectService {
   }
 
   async getById(id: string): Promise<IProject> {
-    const { data } = await this.axiosApi.get<IProject>(`${this.path}/${id}`);
+    const { data } = await this.axiosApi.get<IProject>(`${this.path}/project/${id}`);
     return data;
   }
 
@@ -25,12 +26,13 @@ export class ProjectService {
     return data;
   }
 
-  async create(adminEmail: string, project: IInsertProject): Promise<IProject> {
-    const { data } = await this.axiosApi.post<IProject>(`${this.path}/${adminEmail}`, project);
+  async create(adminEmail: string, project: Omit<IInsertProject, "id">): Promise<IProject> {
+    console.log(adminEmail);
+    const { data } = await this.axiosApi.post(`${this.path}/string@gmail`, project);
     return data;
   }
 
-  async update(projectId: string, project: IInsertProject): Promise<IProject> {
+  async update(projectId: string, project: Omit<IInsertProject, "id">): Promise<IProject> {
     const { data } = await this.axiosApi.put<IProject>(`${this.path}/${projectId}`, project);
     return data;
   }
