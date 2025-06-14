@@ -19,7 +19,7 @@ export const routes: RouterRaw[] = [
     children: [
       {
         title: "login",
-        path: "login",
+        path: "",
         component: () => import("@/pages/auth/Login"),
       },
       {
@@ -48,22 +48,27 @@ export const routes: RouterRaw[] = [
       {
         title: "clientes",
         path: "clientes",
-        component: () => import("@/pages/Clientes"),
+        component: () => import("@/pages/client/Clientes"),
       },
       {
         title: "projetos",
         path: "projects",
-        component: () => import("@/pages/Projects")
+        component: () => import("@/pages/projects/Projects")
+      },
+      {
+        title: "fornecedores",
+        path: "fornecedores",
+        component: () => import("@/pages/supplier/Suppliers"), 
       },
       {
         title: "Orçamentos",
         path: "orcamentos",
-        component: () => import("@/pages/Orcamentos"), // ajuste conforme nome real do arquivo
+        component: () => import("@/pages/budgets/Orcamentos"), 
       },
       {
       title: "sair",
       path: "logout",
-      component: () => import("@/pages/Logout"),
+      component: () => import("@/pages/auth/Logout"),
     }
     ],
   },

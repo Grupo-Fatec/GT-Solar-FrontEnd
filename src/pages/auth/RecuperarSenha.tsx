@@ -108,7 +108,7 @@ const RecuperarSenha = () => {
               type="button"
               variant="outline"
               className="w-full text-base"
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/')}
             >
               Voltar
             </Button>

@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import { IClient } from "@/interfaces/IClient";
+import { IClient, IInsertClient } from "@/interfaces/person/client/IClient";
 import api from "@/boot/AxiosConfig";
 
 export class ClientService {
@@ -7,7 +7,7 @@ export class ClientService {
   private axiosApi: AxiosInstance;
 
   constructor() {
-    this.route = "/clientes";
+    this.route = "/clients";
     this.axiosApi = api;
   }
 
@@ -31,7 +31,7 @@ export class ClientService {
     }
   }
 
-  async create(client: IClient): Promise<IClient> {
+  async create(client: IInsertClient): Promise<IClient> {
     try {
       const response = await this.axiosApi.post<IClient>(this.route, client);
       return response.data;
@@ -41,9 +41,12 @@ export class ClientService {
     }
   }
 
-  async update(id: string, client: IClient): Promise<IClient> {
+  async update(id: string, client: IInsertClient): Promise<IClient> {
     try {
-      const response = await this.axiosApi.put<IClient>(`${this.route}/${id}`, client);
+      const response = await this.axiosApi.put<IClient>(
+        `${this.route}/${id}`,
+        client
+      );
       return response.data;
     } catch (error) {
       console.error(`Erro ao atualizar cliente com ID ${id}:`, error);

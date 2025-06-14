@@ -1,4 +1,4 @@
-import { IClient } from "@/interfaces/IClient";
+import { IClient } from "@/interfaces/person/client/IClient";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import ClientDetailsModal from "./ClientDetailsModal"; // ajuste o caminho conforme sua estrutura

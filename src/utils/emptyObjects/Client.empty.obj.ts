@@ -1,4 +1,4 @@
-import { IClient } from "@/interfaces/IClient";
+import { IClient } from "@/interfaces/person/client/IClient";
 
 export const emptyClient: IClient = {
     id: "",

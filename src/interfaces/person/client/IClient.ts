@@ -17,3 +17,14 @@ export interface IClient {
   created_at: string;
   updated_at: string;
 }
+
+export interface IInsertClient {
+  name: string;
+  street: string;
+  cep: string;
+  uf: string;
+  neighbor: string;
+  email: string;
+  phone: string;
+  document: string;
+}

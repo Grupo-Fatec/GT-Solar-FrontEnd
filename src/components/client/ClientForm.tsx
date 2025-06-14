@@ -1,4 +1,4 @@
-import { IClient } from "@/interfaces/IClient";
+import { IClient } from "@/interfaces/person/client/IClient";
 //import { PropertyType, RoofType } from "@/enums";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
