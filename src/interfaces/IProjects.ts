@@ -3,7 +3,7 @@ import { IAdmin } from "./person/admin/IAdmin";
 import { IClient } from "./person/client/IClient";
 import { IEngineer } from "./person/IEngineer";
 import { IInstaller } from "./person/IInstaller";
-import { IEquipments } from "./supplier/IEquipments";
+import { IEquipments, IEquipmentsProject } from "./supplier/IEquipments";
 
 export interface IProject {
   id: string;
@@ -25,5 +25,5 @@ export interface IInsertProject {
   engineerId: string;
   installerId: string;
   energyConsumption: number;
-  equipments: IEquipments[];
+  equipments: IEquipmentsProject[];
 }

@@ -7,3 +7,7 @@ export interface IEquipments{
     guarantee: string;
     supplierId: string;
 }
+
+export interface IEquipmentsProject extends IEquipments {
+    quantity: number;
+}

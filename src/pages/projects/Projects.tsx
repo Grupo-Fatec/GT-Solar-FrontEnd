@@ -48,36 +48,35 @@ const Projects = () => {
   const [clients, setClients] = useState<IClient[]>([]);
   const [engineers, setEngineers] = useState<IEngineer[]>([]);
   const [installers, setInstallers] = useState<IInstaller[]>([]);
-  const [equipments, setEquipments] = useState<IEquipments[]>();
+  const [equipments, setEquipments] = useState<IEquipments[]>([]);
 
-  const [createModal, setCreateModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState<boolean>(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [idDelete, setIdDelete] = useState<string>();
   const [editMode, setEditMode] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const goTo = (route: string) => {
-    navigate(route);
-  };
-
   const fetchData = async () => {
-    const projectData = await projectService.getAll();
-    const clients = await clientService.getAll();
-    const engineers = await personService.findAllEngineers();
-    const installers = await personService.findAllInstallers();
-    const equipments = await equipmentService.findAll();
+    const [projectData, clientsData, engineersData, installersData, equipmentsData] = await Promise.all([
+      projectService.getAll(),
+      clientService.getAll(),
+      personService.findAllEngineers(),
+      personService.findAllInstallers(),
+      equipmentService.findAll(),
+    ]);
 
     setProjects(projectData);
-    setClients(clients);
-    setEngineers(engineers);
-    setInstallers(installers);
-    setEquipments(equipments);
+    setClients(clientsData);
+    setEngineers(engineersData);
+    setInstallers(installersData);
+    setEquipments(equipmentsData);
   };
+
+  const goTo = (route: string) => navigate(route);
 
   const onCreate = () => {
     setEditMode(false);
-    setModalOpen(true); // era setCreateModal(true)
     setProject(emptyProject);
+    setModalOpen(true);
   };
 
   const onDelete = (id: string) => {
@@ -88,15 +87,12 @@ const Projects = () => {
   const handleCreate = async () => {
     const adminEmail: any = localStorage.getItem("user");
     if (!adminEmail) {
-      console.log(adminEmail);
       alert("Admin não logado!");
       return;
     }
-    await projectService.create("string@gmail", project);
+    await projectService.create(adminEmail, project);
     setProject(emptyProject);
-    setCreateModal(false);
     setModalOpen(false);
-    setEditMode(false);
     fetchData();
   };
 
@@ -122,25 +118,45 @@ const Projects = () => {
       engineerId: p.engineer.id!,
       installerId: p.installer.id!,
       energyConsumption: p.energyConsumption,
-      equipments: p.equipments,
+      equipments: p.equipments.map((eq) => ({
+        id: eq.id,
+        name: eq.name,
+        price: eq.price,
+        type: eq.type,
+        power: eq.power,
+        guarantee: eq.guarantee,
+        supplierId: eq.supplierId,
+        quantity: (eq as any).quantity || 1, // assumindo quantity vem no projeto, ou default 1
+      })),
     });
     setEditMode(true);
     setModalOpen(true);
   };
 
-  const toggleEquipment = (equipmentId: string) => {
-    const exists = project.equipments.some((eq) => eq.id === equipmentId);
-
-    if (exists) {
+  // Atualiza ou adiciona equipamento com quantidade
+  const updateEquipmentQuantity = (equipmentId: string, quantity: number) => {
+    if (quantity < 1) {
+      // Remove equipamento se quantidade < 1
       const updated = project.equipments.filter((eq) => eq.id !== equipmentId);
       setProject({ ...project, equipments: updated });
     } else {
-      const equipmentToAdd = equipments.find((eq) => eq.id === equipmentId);
-      if (equipmentToAdd) {
-        setProject({
-          ...project,
-          equipments: [...project.equipments, equipmentToAdd],
-        });
+      // Verifica se equipamento existe
+      const exists = project.equipments.find((eq) => eq.id === equipmentId);
+      if (exists) {
+        // Atualiza quantidade
+        const updated = project.equipments.map((eq) =>
+          eq.id === equipmentId ? { ...eq, quantity } : eq
+        );
+        setProject({ ...project, equipments: updated });
+      } else {
+        // Adiciona equipamento com quantidade inicial
+        const equipmentToAdd = equipments.find((eq) => eq.id === equipmentId);
+        if (equipmentToAdd) {
+          setProject({
+            ...project,
+            equipments: [...project.equipments, { ...equipmentToAdd, quantity }],
+          });
+        }
       }
     }
   };
@@ -179,12 +195,12 @@ const Projects = () => {
                   onClick={() => goTo(`/pages/projects/${p.id}`)}
                 >
                   {p.id.length > 5
-                    ? p.id.slice(p.id.length - 5, p.id.length) + "..."
+                    ? p.id.slice(p.id.length - 5) + "..."
                     : p.id}
                 </TableCell>
                 <TableCell className="text-center">{p.name}</TableCell>
                 <TableCell className="text-center">
-                  <StatusBadge status={StatusEnum[p.status]}/>
+                  <StatusBadge status={StatusEnum[p.status]} />
                 </TableCell>
                 <TableCell
                   className="text-center"
@@ -193,9 +209,7 @@ const Projects = () => {
                   {p.engineer?.name}
                 </TableCell>
                 <TableCell className="text-center">{p.client?.name}</TableCell>
-                <TableCell className="text-center">
-                  {p.installer?.name}
-                </TableCell>
+                <TableCell className="text-center">{p.installer?.name}</TableCell>
                 <TableCell className="text-center space-x-2">
                   <button
                     onClick={() => openEditModal(p)}
@@ -220,7 +234,7 @@ const Projects = () => {
         <div className="mt-8 flex justify-end">
           <Button
             className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white"
-            onClick={() => onCreate()}
+            onClick={onCreate}
           >
             Adicionar Projeto
           </Button>
@@ -230,9 +244,7 @@ const Projects = () => {
       <Modal
         title={editMode ? "Editar Projeto" : "Cadastro de Projeto"}
         description={
-          editMode
-            ? "Atualize os dados do projeto"
-            : "Preencha os campos para criar"
+          editMode ? "Atualize os dados do projeto" : "Preencha os campos para criar"
         }
         isOpen={modalOpen}
         onClose={() => {
@@ -261,10 +273,7 @@ const Projects = () => {
               type="number"
               value={project.energyConsumption}
               onChange={(e) =>
-                setProject({
-                  ...project,
-                  energyConsumption: Number(e.target.value),
-                })
+                setProject({ ...project, energyConsumption: Number(e.target.value) })
               }
               placeholder="kWh"
             />
@@ -274,9 +283,7 @@ const Projects = () => {
             <label>Cliente</label>
             <select
               value={project.clientId}
-              onChange={(e) =>
-                setProject({ ...project, clientId: e.target.value })
-              }
+              onChange={(e) => setProject({ ...project, clientId: e.target.value })}
               className="p-3 w-full border rounded"
             >
               <option value="">Selecione um cliente</option>
@@ -292,9 +299,7 @@ const Projects = () => {
             <label>Engenheiro</label>
             <select
               value={project.engineerId}
-              onChange={(e) =>
-                setProject({ ...project, engineerId: e.target.value })
-              }
+              onChange={(e) => setProject({ ...project, engineerId: e.target.value })}
               className="p-3 w-full border rounded"
             >
               <option value="">Selecione um engenheiro</option>
@@ -310,9 +315,7 @@ const Projects = () => {
             <label>Instalador</label>
             <select
               value={project.installerId}
-              onChange={(e) =>
-                setProject({ ...project, installerId: e.target.value })
-              }
+              onChange={(e) => setProject({ ...project, installerId: e.target.value })}
               className="p-3 w-full border rounded"
             >
               <option value="">Selecione um instalador</option>
@@ -326,37 +329,41 @@ const Projects = () => {
 
           <div>
             <label>Equipamentos</label>
-
             <div className="overflow-y-auto rounded max-h-[250px] border p-2">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-center w-12"></TableHead>
+                    <TableHead className="text-center w-12">Qtd</TableHead>
                     <TableHead className="text-center">Nome</TableHead>
                     <TableHead className="text-center">Preço</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {equipments?.map((eq) => (
-                    <TableRow key={eq.id}>
-                      <TableCell className="text-center">
-                        <input
-                          type="checkbox"
-                          checked={project.equipments?.some(
-                            (e) => e.id === eq.id
-                          )}
-                          onChange={() => toggleEquipment(eq.id)}
-                        />
-                      </TableCell>
-                      <TableCell className="text-center">{eq.name}</TableCell>
-                      <TableCell className="text-center">
-                        {eq.price.toLocaleString("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        })}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {equipments.map((eq) => {
+                    const projectEq = project.equipments.find((e) => e.id === eq.id);
+                    return (
+                      <TableRow key={eq.id}>
+                        <TableCell className="text-center">
+                          <Input
+                            type="number"
+                            min={0}
+                            value={projectEq?.quantity ?? 0}
+                            onChange={(e) =>
+                              updateEquipmentQuantity(eq.id, Number(e.target.value))
+                            }
+                            className="w-16"
+                          />
+                        </TableCell>
+                        <TableCell className="text-center">{eq.name}</TableCell>
+                        <TableCell className="text-center">
+                          {eq.price.toLocaleString("pt-BR", {
+                            style: "currency",
+                            currency: "BRL",
+                          })}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </div>
@@ -374,7 +381,7 @@ const Projects = () => {
         onConfirm={() => handleDelete(idDelete)}
         confirmLabel="Deletar"
         confirmColor="bg-red-600 text-white hover:bg-red-700"
-      ></Modal>
+      />
     </main>
   );
 };

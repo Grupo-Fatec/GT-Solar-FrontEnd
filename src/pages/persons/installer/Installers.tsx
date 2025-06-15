@@ -13,8 +13,10 @@ import { Button } from "@/components/ui/button";
 import Modal from "@/components/patterns/Modal";
 import { Input } from "@/components/ui/input";
 import { Pencil, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Installers = () => {
+  const navigate = useNavigate();
   const service = new PersonService();
   const emptyInstaller: IInstaller = {
     id: null,
@@ -95,7 +97,7 @@ const Installers = () => {
                 key={i.id}
                 className="hover:bg-gray-100 transition cursor-pointer"
               >
-                <TableCell className="text-center">{i.name}</TableCell>
+                <TableCell className="text-center" onClick={() => navigate(`/pages/installer/${i.id}`)}>{i.name}</TableCell>
                 <TableCell className="text-center">{i.email}</TableCell>
                 <TableCell className="text-center">{i.pricePerKwp}</TableCell>
                 <TableCell className="text-center">{i.availableDays}</TableCell>

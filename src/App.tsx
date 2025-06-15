@@ -28,6 +28,8 @@ import Engineer from "./pages/persons/enginner/Engineer";
 import Installers from "./pages/persons/installer/Installers";
 import Installer from "./pages/persons/installer/Installer";
 import Project from "./pages/projects/Project";
+import AcceptProject from "./pages/projects/confirmProject/AcceptProject";
+import ProjectAccepted from "./pages/projects/confirmProject/ProjectAccepted";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +45,12 @@ const App = () => (
             <Route index element={<Login />} />
             <Route path="/recoverypassword" element={<RecuperarSenha />} />
             <Route path="/cadastro" element={<Cadastro />} />
+            {/* Confirmação(ou não) de prohetos */}
+            <Route
+              path="/project/:userType/accept/:id"
+              element={<AcceptProject />}
+            />
+            <Route path="project/accepted/:id" element={<ProjectAccepted />} />
           </Route>
 
           {/* Rotas protegidas (com SidebarLayout) */}
@@ -88,7 +96,7 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
-            
+
             <Route
               path="/pages/logout"
               element={
