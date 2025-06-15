@@ -1,84 +1,65 @@
-import BudgetModal from '@/components/BudgetModal';
-import { useEffect, useState } from 'react';
+import BudgetModal from "@/components/BudgetModal";
+import { useEffect, useState } from "react";
 import { Budget } from "@/types/Budget"; // Garantir que você tem o tipo correto
-import BudgetTable from '@/components/BudgetsTable';
-import { Button } from '@/components/ui/button';
-import DeleteModal from '@/components/DeleteModal';
-import SearchBar from '@/components/SearchBar';
-import Toast from '@/components/Toast';
+import BudgetTable from "@/components/BudgetsTable";
+import { Button } from "@/components/ui/button";
+import DeleteModal from "@/components/DeleteModal";
+import SearchBar from "@/components/SearchBar";
+import Toast from "@/components/Toast";
+import { IProject } from "@/interfaces/IProjects";
+import { ProjectService } from "@/services/ProjectService";
 
-const budgetsData: Budget[] = [
-  { id: 1, cliente: 'Carla Pereira da Silva', dataInicio: '11/03/2025', valor: 8000, status: 'Pendente' },
-  { id: 2, cliente: 'João Alves de Souza', dataInicio: '15/03/2025', valor: 12500, status: 'Aprovado' },
-  { id: 3, cliente: 'Maria Oliveira Santos', dataInicio: '20/03/2025', valor: 7300, status: 'Recusado' },
-  { id: 4, cliente: 'Pedro Costa Lima', dataInicio: '01/04/2025', valor: 22000, status: 'Aprovado' },
-  { id: 5, cliente: 'Ana Beatriz Rocha', dataInicio: '05/04/2025', valor: 9500, status: 'Pendente' },
-];
-
-const Budgets: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [budgets, setBudgets] = useState<Budget[]>(budgetsData);
-  const [selectedBudgetId, setSelectedBudgetId] = useState<number | null>(null);
+const Budgets = () => {
+  const service = new ProjectService();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [budgets, setBudgets] = useState<IProject[]>([]);
+  const  [budget, setBudget] = useState<IProject>();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isBudgetModalOpen, setBudgetModalOpen] = useState(false);
-  const [budgetToEdit, setBudgetToEdit] = useState<Budget | null>(null);
 
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState<"success" | "error" | "info">("success");
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error" | "info">(
+    "success"
+  );
+
   const [showToast, setShowToast] = useState(false);
 
-
-  useEffect(() => {
-    if (searchQuery) {
-      const filtered = budgetsData.filter((budget) =>
-        budget.cliente.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setBudgets(filtered);
-    } else {
-      setBudgets(budgetsData);
-    }
-  }, [searchQuery]);
-
-  const handleEditBudget = (budgetId: number) => {
-    const budget = budgets.find(b => b.id === budgetId);
+  const handleEditBudget = (budgetId: string) => {
+    const budget = budgets.find((b) => b.id === budgetId);
     if (budget) {
-      setBudgetToEdit(budget);
       setBudgetModalOpen(true);
     }
   };
 
   const handleAddBudgetClick = () => {
-    setBudgetToEdit(null);
     setBudgetModalOpen(true);
   };
 
-  const handleDeleteClick = (budgetId: number) => {
-    setSelectedBudgetId(budgetId);
+  const handleDeleteClick = (budgetId: string) => {
     setDeleteModalOpen(true);
   };
 
   const confirmDelete = () => {
-    if (selectedBudgetId !== null) {
-      setBudgets(budgets.filter((budget) => budget.id !== selectedBudgetId));
-      setSelectedBudgetId(null);
-      setDeleteModalOpen(false);
-      triggerToast('Orçamento excluído com sucesso!', 'success');
-    }
+
   };
 
-  const handleSaveBudget = (budget: Budget) => {
-    if (budgetToEdit) {
-      setBudgets(budgets.map(b => b.id === budget.id ? budget : b));
-      triggerToast('Orçamento editado com sucesso!', 'success');
-    } else {
-      setBudgets([...budgets, budget]);
-      triggerToast('Orçamento cadastrado com sucesso!', 'success');
-    }
-    setBudgetModalOpen(false);
-    setBudgetToEdit(null);
+  const handleSaveBudget = () => {
+
   };
-  
-  const triggerToast = (message: string, type: "success" | "error" | "info" = "success") => {
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      const data = await service.getAll();
+      setBudgets(data);
+      console.log(data)
+    }
+    fetchProject();
+  }, []);
+
+  const triggerToast = (
+    message: string,
+    type: "success" | "error" | "info" = "success"
+  ) => {
     setToastMessage(message);
     setToastType(type);
     setShowToast(true);
@@ -101,49 +82,21 @@ const Budgets: React.FC = () => {
             <div className="bg-white rounded-lg shadow">
               <BudgetTable
                 budgets={budgets}
-                onEdit={handleEditBudget}
-                onDelete={handleDeleteClick}
               />
             </div>
-             <div className="mt-8 flex justify-end">
-            
-            <Button
-              className="bg-[#4F8A6E] hover:bg-[#2B5337] text-white"
-              onClick={handleAddBudgetClick}
-            >
-              Adicionar orçamento
-            </Button>
-          </div>
-
           </div>
         </main>
       </div>
 
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        onConfirm={confirmDelete}
-        title="Excluir orçamento"
-        description={`Tem certeza que deseja excluir o orçamento de ${budgets.find(b => b.id === selectedBudgetId)?.cliente}?`}
-      />
-
-      <BudgetModal
-        isOpen={isBudgetModalOpen}
-        onClose={() => setBudgetModalOpen(false)}
-        onSave={handleSaveBudget}
-        budgetToEdit={budgetToEdit}
-      />
-      
       {showToast && (
-      <Toast
-        message={toastMessage}
-        type={toastType}
-        onClose={() => setShowToast(false)}
-      />
-    )}
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </div>
   );
 };
 
 export default Budgets;
-

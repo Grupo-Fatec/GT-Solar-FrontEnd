@@ -1,7 +1,7 @@
 export enum StatusEnum {
-  PLANNING = "planning",
-  EXECUTION = "execution",
-  IN_PROGRESS = "in_progress",
-  DONE = "done",
-  CANCELED = "canceled",
+  PLANNING = "em planejamento",
+  EXECUTION = "em execução",
+  IN_PROGRES = "Em progresso",
+  DONE = "Finalizado",
+  CANCELED = "cancelado",
 }

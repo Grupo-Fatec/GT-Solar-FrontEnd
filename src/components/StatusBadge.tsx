@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { StatusEnum } from '@/enums/StatusEnum';
 
-type StatusEnum = 'planning' | 'execution' | 'in_progress' | 'done' | 'canceled';
 
 interface StatusBadgeProps {
   status: StatusEnum;
@@ -11,45 +11,45 @@ interface StatusBadgeProps {
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
   // Mapeia status em inglês para texto em português
   const statusPTMap: Record<StatusEnum, string> = {
-    planning: 'Planejamento',
-    execution: 'Execução',
-    in_progress: 'Em Progresso',
-    done: 'Finalização',
-    canceled: 'Cancelado',
+    [StatusEnum.PLANNING]: 'Planejamento',
+    [StatusEnum.EXECUTION]: 'Execução',
+    [StatusEnum.IN_PROGRES]: 'Em Progresso',
+    [StatusEnum.DONE]: 'Finalização',
+    [StatusEnum.CANCELED]: 'Cancelado',
   };
 
   // Mapeia status para estilo
   const getStatusStyle = () => {
     switch (status) {
-      case 'execution':
+      case StatusEnum.EXECUTION:
         return {
           backgroundColor: '#f9edbf',
           borderRadius: '10px',
           padding: '6px 18px',
           fontSize: '14px',
         };
-      case 'done':
+      case StatusEnum.DONE:
         return {
           backgroundColor: '#9bd9a9',
           borderRadius: '10px',
           padding: '6px 18px',
           fontSize: '14px',
         };
-      case 'planning':
+      case StatusEnum.PLANNING:
         return {
           backgroundColor: '#a8aecc',
           borderRadius: '10px',
           padding: '6px 18px',
           fontSize: '14px',
         };
-      case 'in_progress':
+      case StatusEnum.IN_PROGRES:
         return {
           backgroundColor: '#f0c987',
           borderRadius: '10px',
           padding: '6px 18px',
           fontSize: '14px',
         };
-      case 'canceled':
+      case StatusEnum.CANCELED:
         return {
           backgroundColor: '#f28b82',
           borderRadius: '10px',

@@ -24,6 +24,7 @@ import { StatusEnum } from "@/enums/StatusEnum";
 import { Pencil, Trash2 } from "lucide-react";
 import { EquipmentService } from "@/services/EquipmentService";
 import { IEquipments } from "@/interfaces/supplier/IEquipments";
+import StatusBadge from "@/components/StatusBadge";
 
 const Projects = () => {
   const navigate = useNavigate();
@@ -94,6 +95,8 @@ const Projects = () => {
     await projectService.create("string@gmail", project);
     setProject(emptyProject);
     setCreateModal(false);
+    setModalOpen(false);
+    setEditMode(false);
     fetchData();
   };
 
@@ -129,11 +132,9 @@ const Projects = () => {
     const exists = project.equipments.some((eq) => eq.id === equipmentId);
 
     if (exists) {
-      // Remove equipamento
       const updated = project.equipments.filter((eq) => eq.id !== equipmentId);
       setProject({ ...project, equipments: updated });
     } else {
-      // Adiciona equipamento
       const equipmentToAdd = equipments.find((eq) => eq.id === equipmentId);
       if (equipmentToAdd) {
         setProject({
@@ -147,9 +148,9 @@ const Projects = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <main className="p-10">
-      {JSON.stringify(project)}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Projetos</h1>
       </div>
@@ -183,7 +184,7 @@ const Projects = () => {
                 </TableCell>
                 <TableCell className="text-center">{p.name}</TableCell>
                 <TableCell className="text-center">
-                  {StatusEnum[p.status]}
+                  <StatusBadge status={StatusEnum[p.status]}/>
                 </TableCell>
                 <TableCell
                   className="text-center"
@@ -325,20 +326,39 @@ const Projects = () => {
 
           <div>
             <label>Equipamentos</label>
-            <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-2 border rounded">
-              {equipments?.map((eq) => (
-                <label
-                  key={eq.id}
-                  className="flex items-center space-x-2 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={project.equipments.some((e) => e.id === eq.id)}
-                    onChange={() => toggleEquipment(eq.id)}
-                  />
-                  <span>{eq.name}</span>
-                </label>
-              ))}
+
+            <div className="overflow-y-auto rounded max-h-[250px] border p-2">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-center w-12"></TableHead>
+                    <TableHead className="text-center">Nome</TableHead>
+                    <TableHead className="text-center">Preço</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {equipments?.map((eq) => (
+                    <TableRow key={eq.id}>
+                      <TableCell className="text-center">
+                        <input
+                          type="checkbox"
+                          checked={project.equipments?.some(
+                            (e) => e.id === eq.id
+                          )}
+                          onChange={() => toggleEquipment(eq.id)}
+                        />
+                      </TableCell>
+                      <TableCell className="text-center">{eq.name}</TableCell>
+                      <TableCell className="text-center">
+                        {eq.price.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        })}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           </div>
         </form>
