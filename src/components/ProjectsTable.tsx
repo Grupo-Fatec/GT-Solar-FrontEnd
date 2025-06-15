@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import StatusBadge from "./StatusBadge";
-import { Project } from "../types/Project";
 import { Pencil, Trash2 } from "lucide-react";
+import { IProject } from "@/interfaces/IProjects";
 
 interface ProjectsTableProps {
-  projects: Project[];
-  onEdit: (projectId: number) => void;
-  onDelete: (projectId: number) => void;
+  projects: IProject[];
+  onEdit: (projectId: string) => void;
+  onDelete: (projectId: string) => void;
 }
 
 const ProjectsTable: React.FC<ProjectsTableProps> = ({
@@ -71,27 +71,21 @@ const ProjectsTable: React.FC<ProjectsTableProps> = ({
         <tbody className="bg-white divide-y divide-gray-200">
           {projects.map((project) => (
             <tr key={project.id} className="hover:bg-gray-50">
-              <td className="px-3 py-3 whitespace-nowrap">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300"
-                  checked={selectedProjects.includes(project.id)}
-                  onChange={() => toggleProjectSelection(project.id)}
-                />
-              </td>
               <td className="px-6 py-3 whitespace-nowrap">
                 <div className="text-sm font-medium text-gray-900">
-                  {project.cliente}
+                  {project.client.name}
                 </div>
               </td>
+              {/* 
               <td className="px-6 py-3 whitespace-nowrap">
                 <div className="text-sm text-gray-500">
                   {project.dataInicio}
                 </div>
               </td>
+              */}
               <td className="px-6 py-3 whitespace-nowrap">
                 <div className="text-sm text-gray-900">
-                  R$ {project.valor.toLocaleString("pt-BR")}
+                  R$ {project.approvedValue.toLocaleString("pt-BR")}
                 </div>
               </td>
               <td className="px-6 py-3 whitespace-nowrap">

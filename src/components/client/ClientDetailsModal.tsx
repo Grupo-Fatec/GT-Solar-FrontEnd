@@ -1,4 +1,4 @@
-import { IClient } from "@/interfaces/IClient";
+import { IClient } from "@/interfaces/person/client/IClient";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 

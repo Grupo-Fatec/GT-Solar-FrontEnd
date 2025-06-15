@@ -9,7 +9,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">GT Solar</h1>
-            <p className="text-xl text-gray-600 mt-2">Olá, Débora 👋</p>
+            <p className="text-xl text-gray-600 mt-2">Olá 👋</p>
           </div>
 
           {/* Estatísticas principais */}

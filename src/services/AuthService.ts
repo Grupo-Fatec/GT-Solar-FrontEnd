@@ -16,6 +16,10 @@ export class AuthService {
         email,
         password,
       });
+      if (response.status !== 200) {
+        return response
+      }
+      localStorage.setItem("user", JSON.stringify(response.data));
       return response;
     } catch (error) {
       console.error("Erro ao tentar fazer login:", error);
@@ -26,6 +30,7 @@ export class AuthService {
   async logout(): Promise<void> {
     try {
       await this.axiosApi.post(`${this.route}/logout`);
+      localStorage.removeItem("user");
     } catch (error) {
       console.error("Erro ao tentar fazer logout:", error);
       throw error;

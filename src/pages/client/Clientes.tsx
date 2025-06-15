@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import SearchBar from "@/components/SearchBar";
-import ClientTable from "../components/client/ClientTable";
-import { ClientForm } from "../components/client/ClientForm";
-import { DeleteConfirmationDialog } from "../components/DeleteConfirmationDialog";
-import { IClient } from "@/interfaces/IClient";
+import ClientTable from "../../components/client/ClientTable";
+import { ClientForm } from "../../components/client/ClientForm";
+import { DeleteConfirmationDialog } from "../../components/DeleteConfirmationDialog";
+import { IClient } from "@/interfaces/person/client/IClient";
 import { ModalComponent } from "@/components/ModalComponent";
 import { emptyClient } from "@/utils/emptyObjects/Client.empty.obj";
 import { ClientService } from "@/services/ClientService";
@@ -21,19 +21,6 @@ const Clientes = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
 
   const [clientToDeleteId, setClientToDeleteId] = useState<string | null>(null);
-
-  // Buscar todos os clientes ao carregar
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const data = await clientService.getAll();
-        setClientList(data);
-      } catch (error) {
-        console.error("Erro ao buscar clientes:", error);
-      }
-    }
-    fetchClients();
-  }, []);
 
   const fetchClients = async () => {
     try {
@@ -103,6 +90,18 @@ const Clientes = () => {
     setDeleteModal(true);
   };
 
+  // Buscar todos os clientes ao carregar
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const data = await clientService.getAll();
+        setClientList(data);
+      } catch (error) {
+        console.error("Erro ao buscar clientes:", error);
+      }
+    };
+    fetchClients();
+  }, []);
   return (
     <div className="flex h-screen">
       {!showForm ? (

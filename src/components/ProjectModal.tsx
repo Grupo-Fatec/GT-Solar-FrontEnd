@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
-import { Project } from '../types/Project';
 import { NumericFormat } from 'react-number-format';
+import { IInsertProject, IProject } from '@/interfaces/IProjects';
+import { StatusEnum } from '@/enums/StatusEnum';
 
 interface ProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (project: Project) => void;
-  projectToEdit?: Project;
+  onSave: (project: IInsertProject) => void;
+  projectToEdit?: IInsertProject;
 }
 
 const ProjectModal: React.FC<ProjectModalProps> = ({
@@ -18,10 +19,14 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
   onSave,
   projectToEdit
 }) => {
+  // Estado para o nome do cliente (string)
   const [nome, setNome] = useState('');
+  // Estado para a data no padrão ISO yyyy-mm-dd para o input date
   const [dataInicio, setDataInicio] = useState('');
+  // Valor como string para o input formatado
   const [valor, setValor] = useState('');
-  const [status, setStatus] = useState<'Execução' | 'Finalização' | 'Planejamento'>('Execução');
+  // Status do projeto, obrigatório, usando o enum StatusEnum
+  const [status, setStatus] = useState<StatusEnum>(StatusEnum.EXECUTION);
 
   const [errors, setErrors] = useState({
     nome: '',
@@ -30,22 +35,20 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
     status: '',
   });
 
+  // Ao carregar projeto para edição, inicializa estados
   useEffect(() => {
     if (projectToEdit) {
-      setNome(projectToEdit.cliente);
-      const formattedDate = projectToEdit.dataInicio.split('/').reverse().join('-');
-      setDataInicio(formattedDate);
-      setValor(projectToEdit.valor.toString());
-      setStatus(projectToEdit.status);
+      setNome(projectToEdit.clientId);
     }
   }, [projectToEdit]);
 
+  // Quando modal fecha, limpa os campos
   useEffect(() => {
     if (!isOpen) {
       setNome('');
       setDataInicio('');
       setValor('');
-      setStatus('Execução');
+      setStatus(StatusEnum.EXECUTION);
       setErrors({
         nome: '',
         dataInicio: '',
@@ -92,25 +95,12 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
       isValid = false;
     }
 
-    setErrors(newErrors); // Atualiza o estado de erros
+    setErrors(newErrors);
     return isValid;
   };
 
   const handleSubmit = () => {
-    // Chama a validação ao clicar em "Salvar"
     if (!validateForm()) return;
-
-    const [year, month, day] = dataInicio.split('-');
-    const formattedDate = `${day}/${month}/${year}`;
-
-    onSave({
-      id: projectToEdit ? projectToEdit.id : Math.random(),
-      cliente: nome,
-      dataInicio: formattedDate,
-      valor: parseFloat(valor),
-      status,
-    });
-
     onClose();
   };
 
@@ -123,7 +113,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-6 mt-6">
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
             <Input 
@@ -164,13 +153,14 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
             <select
               className="w-full border border-gray-300 p-2 rounded-md"
               value={status}
-              onChange={(e) => setStatus(e.target.value as 'Execução' | 'Finalização' | 'Planejamento')}
+              onChange={(e) => setStatus(e.target.value as StatusEnum)}
             >
-              <option value="Execução">Execução</option>
-              <option value="Finalização">Finalização</option>
-              <option value="Planejamento">Planejamento</option>
+              <option value={StatusEnum.EXECUTION}>Execução</option>
+              <option value={StatusEnum.DONE}>Finalização</option>
+              <option value={StatusEnum.PLANNING}>Planejamento</option>
+              <option value={StatusEnum.IN_PROGRESS}>Em progresso</option>
+              <option value={StatusEnum.CANCELED}>Cancelado</option>
             </select>
-            {errors.status && <p className="text-red-500 text-sm">{errors.status}</p>}
           </div>
 
           <div className="flex justify-end pt-4">
@@ -181,7 +171,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
               {projectToEdit ? 'Salvar Alterações' : 'Salvar'}
             </Button>
           </div>
-
         </div>
       </DialogContent>
     </Dialog>
@@ -189,4 +178,3 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
 };
 
 export default ProjectModal;
-
