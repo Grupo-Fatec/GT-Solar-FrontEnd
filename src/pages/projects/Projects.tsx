@@ -55,6 +55,9 @@ const Projects = () => {
   const [editMode, setEditMode] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
+
+
+
   const fetchData = async () => {
     const [projectData, clientsData, engineersData, installersData, equipmentsData] = await Promise.all([
       projectService.getAll(),

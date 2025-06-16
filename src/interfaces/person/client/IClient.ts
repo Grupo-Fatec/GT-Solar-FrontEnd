@@ -1,3 +1,6 @@
+import { PropertyType } from "@/enums/PropertieType.enum";
+import { RoofType } from "@/enums/RoofType.enum";
+
 export interface IClient {
   id: string;
   name: string;
@@ -27,4 +30,6 @@ export interface IInsertClient {
   email: string;
   phone: string;
   document: string;
+  roofType: RoofType;
+  property: PropertyType;
 }
