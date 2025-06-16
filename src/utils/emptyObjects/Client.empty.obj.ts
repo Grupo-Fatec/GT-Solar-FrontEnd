@@ -1,6 +1,6 @@
-import { IClient } from "@/interfaces/person/client/IClient";
+import { IClient, IInsertClient } from "@/interfaces/person/client/IClient";
 
-export const emptyClient: IClient = {
+export const emptyClient: IInsertClient = {
     id: "",
     name: "",
     document: "",
@@ -10,13 +10,9 @@ export const emptyClient: IClient = {
     houseNumber: "",
     complement: "",
     neighbor: "",
-    city: "",
     uf: "",
     cep: "",
     roofType: "",
-    property: "",
-    observations: "",
-    created_at: "",
-    updated_at: ""
+    propertyType: "",
   };
   

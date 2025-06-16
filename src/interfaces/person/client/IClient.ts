@@ -15,21 +15,24 @@ export interface IClient {
   uf: string;
   cep: string;
   roofType: string;
-  property: string;
+  propertyType: string;
   observations: string;
   created_at: string;
   updated_at: string;
 }
 
 export interface IInsertClient {
+  id: string;
   name: string;
   street: string;
   cep: string;
   uf: string;
+  houseNumber: string;
+  complement: string;
   neighbor: string;
   email: string;
   phone: string;
   document: string;
-  roofType: RoofType;
-  property: PropertyType;
+  roofType: RoofType | string;
+  propertyType: PropertyType | string;
 }

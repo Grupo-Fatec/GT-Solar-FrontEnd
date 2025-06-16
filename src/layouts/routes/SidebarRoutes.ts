@@ -19,6 +19,6 @@ export const menuItems: IMenuItems[] = [
   { icon: Truck, label: "Fornecedores", path: "/pages/suppliers" },
   { icon: FileSpreadsheet, label: "Projetos", path: "/pages/projects" },
   { icon: Calculator, label: "Orçamentos", path: "/pages/orcamentos" },
-  { icon: DollarSign, label: "Comissões", path: "/pages/comissoes" },
-  { icon: PiggyBank, label: "Fluxo de caixa", path: "/pages/fluxo-de-caixa" },
+  //{ icon: DollarSign, label: "Comissões", path: "/pages/comissoes" },
+  //{ icon: PiggyBank, label: "Fluxo de caixa", path: "/pages/fluxo-de-caixa" },
 ];

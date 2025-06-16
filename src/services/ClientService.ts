@@ -31,7 +31,7 @@ export class ClientService {
     }
   }
 
-  async create(client: IInsertClient): Promise<IClient> {
+  async create(client: Omit<IInsertClient, "id">): Promise<IClient> {
     try {
       const response = await this.axiosApi.post<IClient>(this.route, client);
       return response.data;
@@ -41,7 +41,10 @@ export class ClientService {
     }
   }
 
-  async update(id: string, client: IInsertClient): Promise<IClient> {
+  async update(
+    id: string,
+    client: Omit<IInsertClient, "id">
+  ): Promise<IClient> {
     try {
       const response = await this.axiosApi.put<IClient>(
         `${this.route}/${id}`,

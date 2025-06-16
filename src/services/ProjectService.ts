@@ -27,7 +27,7 @@ export class ProjectService {
   }
 
   async create(adminEmail: string, project: Omit<IInsertProject, "id">): Promise<IProject> {
-    const { data } = await this.axiosApi.post(`${this.path}/alice@admin.com`, project);
+    const { data } = await this.axiosApi.post(`${this.path}/string@gmail`, project);
     return data;
   }
 

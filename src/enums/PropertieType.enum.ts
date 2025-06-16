@@ -8,5 +8,5 @@ export enum PropertyType {
   RELIGIOSO = "religioso",
   MIXTO = "misto",
   CONDOMINIO = "condomínio",
-  TEMPORARIO = "temporário"
+  TEMPORARIO = "temporário",
 }

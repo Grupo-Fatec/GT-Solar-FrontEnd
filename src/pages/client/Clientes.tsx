@@ -4,7 +4,7 @@ import SearchBar from "@/components/SearchBar";
 import ClientTable from "../../components/client/ClientTable";
 import { ClientForm } from "../../components/client/ClientForm";
 import { DeleteConfirmationDialog } from "../../components/DeleteConfirmationDialog";
-import { IClient } from "@/interfaces/person/client/IClient";
+import { IClient, IInsertClient } from "@/interfaces/person/client/IClient";
 import { ModalComponent } from "@/components/ModalComponent";
 import { emptyClient } from "@/utils/emptyObjects/Client.empty.obj";
 import { ClientService } from "@/services/ClientService";
@@ -14,7 +14,7 @@ const clientService = new ClientService();
 const Clientes = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [clientList, setClientList] = useState<IClient[]>([]);
-  const [client, setClient] = useState<IClient>(emptyClient);
+  const [client, setClient] = useState<IInsertClient>(emptyClient);
   const [editModal, setEditModal] = useState<boolean>(false);
   const [createForm, setCreateForm] = useState<boolean>(false);
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
@@ -37,13 +37,14 @@ const Clientes = () => {
       const selectedClient = await clientService.getById(id);
       setClient(selectedClient);
       setEditModal(true);
+      console.log(selectedClient);
     } catch (error) {
       console.error("Erro ao buscar cliente:", error);
       alert("Erro ao buscar cliente");
     }
   };
 
-  const handleUpdateClient = async (updatedClient: IClient) => {
+  const handleUpdateClient = async (updatedClient: IInsertClient) => {
     try {
       await clientService.update(updatedClient.id, updatedClient);
       setEditModal(false);
@@ -61,7 +62,7 @@ const Clientes = () => {
     setShowForm(true);
   };
 
-  const handleCreateClient = async (newClient: IClient) => {
+  const handleCreateClient = async (newClient: IInsertClient) => {
     try {
       await clientService.create(newClient);
       setShowForm(false);
