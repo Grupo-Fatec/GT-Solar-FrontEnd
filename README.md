@@ -35,9 +35,39 @@ A GT Solar contribui para a **universalização do acesso à energia limpa** ao 
 - Tailwind CSS  
 
 ---
+### ▶️ Como executar o front-end (React + TypeScript + Tailwind CSS)
 
-## 👨‍💻 Repositório
 
-🔗 Repositório GitHub: [https://github.com/Grupo-Fatec/GT-Solar-Backend](https://github.com/Grupo-Fatec/GT-Solar-Backend.git)
-🔗 Repositório GitHub: [https://github.com/Grupo-Fatec/GT-Solar-FrontEnd](https://github.com/Grupo-Fatec/GT-Solar-FrontEnd.git)
+```bash
+# 1. Clone o repositório
+git clone https://github.com/Grupo-Fatec/GT-Solar-FrontEnd.git
 
+# 2. Acesse a pasta do projeto
+cd GT-Solar-FrontEnd
+
+# 3. Instale as dependências
+npm install
+
+# 4. Inicie o servidor de desenvolvimento
+npm run dev
+```
+
+Depois disso, acesse o sistema em:  
+[http://localhost:5173](http://localhost:5173)
+
+---
+
+## 👨‍💻 Desenvolvedores
+
+- Gabriel Godoi   
+- Rafael Mascarenhas
+- Lindalva Carlos
+- Eduarda Josileide
+- Vitor Tavares
+
+---
+
+### 🔗 Repositórios GitHub
+
+- **Back-end**: [https://github.com/Grupo-Fatec/GT-Solar-Backend](https://github.com/Grupo-Fatec/GT-Solar-Backend.git)  
+- **Front-end**: [https://github.com/Grupo-Fatec/GT-Solar-FrontEnd](https://github.com/Grupo-Fatec/GT-Solar-FrontEnd.git)
